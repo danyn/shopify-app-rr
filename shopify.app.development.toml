@@ -1,0 +1,34 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "6894f22e39e185bef9dada4628044f8a"
+name = "cf-sf-app-0-dev"
+handle = "cf-sf-app-0-dev"
+application_url = "https://dev-tunnel.minder.solutions"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = false
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+#scopes = "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations"
+scopes = "write_products"
+[auth]
+redirect_urls = [ ]
+
+[pos]
+embedded = false
+
+use_legacy_install_flow = false

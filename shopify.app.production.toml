@@ -1,0 +1,35 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+#client_secret injected by shopify cli using client_id
+client_id = "69ac55ffe47bb1962a10be0573f34495"
+
+
+name = "cf-sf-app-0-prod"
+handle = "cf-sf-app-0-prod"
+application_url = "https://cf-sf-app-0.minder-solutions.workers.dev"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = false
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = ["https://cf-sf-app-0.minder-solutions.workers.dev/auth"]
+
+[pos]
+embedded = false

@@ -1,0 +1,6 @@
+node_modules
+.react-router
+# *.sqlite
+.wrangler
+.vscode
+.dev.vars

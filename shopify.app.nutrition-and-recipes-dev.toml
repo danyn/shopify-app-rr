@@ -1,0 +1,25 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+#app id
+#287290425345
+#app handle
+#nutrition-and-recipes-dev
+
+client_id = "f92dfcf6381d8c87cf3e3906fcdfc5e0"
+name = "Nutrition and Recipes Dev"
+application_url = "https://dev-tunnel.minder.solutions"
+embedded = true
+
+[webhooks]
+api_version = "2025-10"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations"
+optional_scopes = [ ]
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = [ ]
+
+[build]
+automatically_update_urls_on_dev = true

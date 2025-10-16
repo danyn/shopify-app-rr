@@ -1,0 +1,86 @@
+{
+  "name": "cf-nutrition-and-recipes",
+  "version": "0.2.2",
+  "description": "cloudflare workers host shopify app cloudflare tunnel in scripts command for dev",
+  "myBuildNoteWrangler": {
+    "wrangler-versions": "on the main branch wrangler needs to be at 4, when running cf:dev wrangler needs to be at 3",
+    "never": "push the package.lock file to origin main and always make sure wrangler is at 4 on origin main",
+    "reason": "The cloudflare github app deploys to the cloudflare worker from origin main.  It needs wrangler 4 for its build and it will fail without it. Remix run dev needs wrangler at 3 for the local tunnel."
+  },
+  "cloudflare": {
+    "label": "Remix Framework Starter",
+    "products": [
+      "Workers"
+    ],
+    "categories": [],
+    "icon_urls": [
+      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
+    ],
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/eb6781d2-a092-458b-772c-97b1cdaaf700/public",
+    "dash": true
+  },
+  "dependencies": {
+    "@react-router/cloudflare": "^7.0.0",
+    "@react-router/fs-routes": "^7.0.0",
+    "@react-router/node": "^7.0.0",
+    "@react-router/serve": "^7.0.0",
+    "@shopify/app-bridge-react": "4.2.2",
+    "@shopify/shopify-app-react-router": "^1.0.0",
+    "@shopify/shopify-app-session-storage-kv": "4.0.20",
+    "drizzle-orm": "^0.44.5",
+    "isbot": "^5.1.30",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router": "^7.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250404.0",
+    "@react-router/dev": "^7.0.0",
+    "@shopify/app-bridge-ui-types": "^0.3.3",
+    "@types/react": "18.3.1",
+    "@types/react-dom": "18.3.1",
+    "@typescript-eslint/eslint-plugin": "8.31.0",
+    "@typescript-eslint/parser": "8.31.0",
+    "better-sqlite3": "^12.4.1",
+    "drizzle-kit": "^0.31.4",
+    "eslint": "9.25.1",
+    "eslint-import-resolver-typescript": "3.7.0",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "tsx": "^4.20.5",
+    "typescript": "5.8.3",
+    "vite": "^5.4.18",
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^3.114.4"
+  },
+  "manual-revisions": {
+    "wrangler-production-main": "4.36.0",
+    "wrangler-development-never-main": "^3.114.4"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "private": true,
+  "scripts": {
+    "build": "react-router build",
+    "deploy": "wrangler deploy",
+    "cf-typegen": "wrangler types",
+    "check": "tsc && remix vite:build && wrangler deploy --dry-run",
+    "dev": "react-router dev",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "typecheck": "react-router typegen && tsc",
+    "typegen": "wrangler types",
+    "cf:tunnel": "cloudflared tunnel run --token $CF_TUNNEL_TOKEN",
+    "cf:dev": "shopify app dev --tunnel-url https://dev-tunnel.minder.solutions:5500",
+    "packages:show": "npm list --depth=0",
+    "drizzle:generate:subscriptions": "drizzle-kit generate --config=drizzle-db/drizzle.subscriptions.config.ts --name=intialMigrationFromSchemaFiles",
+    "drizzle:studio": "drizzle-kit studio --config=drizzle-db/drizzle.studio.config.ts",
+    "db:migrate:subscriptions:production": "npx wrangler@4 d1 migrations apply DB_SUBSCRIPTIONS --remote",
+    "db:migrate:subscriptions:development": "npx wrangler@4  d1 migrations apply DB_SUBSCRIPTIONS --local",
+    "lh:dev": "shopify app dev --use-localhost"
+  },
+  "sideEffects": false,
+  "type": "module"
+}
