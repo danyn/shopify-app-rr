@@ -59,6 +59,12 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
       createdAt: subscription.createdAt, // ISO-8601
       chargeId,
     }
+    /*
+      Upsert the table entry. If the shopDomain is new create a new record
+      If the shopDomain exists replace all the values with 'entry'.
+      Each shop only has one entry in the table. 
+      On uninstall webhook we need to remove the entry.
+    */ 
     await db_subscriptions
       .insert(subscriptionTracking)
       .values(entry)

@@ -43,9 +43,61 @@ For more info see KV_SETUP_GUIDE.md
 The environment variables can come from more than one place. 
 
 - dev.vars see (dev.vars.example) serves to provide secret vars during dev (cloudflare + wrangler convention)
-- wrangler.jsonc can put anything into the cloudflare env so could be used instead of dev.vars if wanted. this will also put the vars into the cloudflare dashboard. Secrets are set in the cloudflare dashboard only.
-- variables are also injected by the shopify.app.xyz.toml files
-- It is my understanding that the client secret (shopify app secret key) is injected by the shopify dev command for local development but needs to be a secret in the cloudflare dashboard for the production app.
+- wrangler.jsonc can put anything into the cloudflare env so could be used instead of dev.vars if wanted. this will also put the vars into the cloudflare dashboard. Secrets are set in the cloudflare dashboard only. 
+- here use the env property to put the variables in
+- when in dev variables are also injected by the shopify.app.xyz.toml files
+
+- The client secret (shopify app secret key) is injected by the shopify dev command for local development and does not need to be anywhere but needs to be a secret in the cloudflare dashboard for the production app.
+
+```
+  
+  * an app is mostly a bundle of env variables and access scopes that is allowed on shopify.
+  * a single codebase can have many of these bundles of variables (apps) but the "scopes" all need to match.
+  * the app is hosted by us on cloudflare in this case
+  * Shopify hosts the /extensions folder on its own servers.
+  * The app  writes metafields and shop data that is accessible in the /extensions
+  * if an app where only ever in a dev mode it would only need one set of variables from the shopify.app.xyz.toml file and the ones in .dev.vars
+  
+  * some values are in both files:
+  shopify.app.toml       wrangler.jsonc
+  client_id        ->   SHOPIFY_API_KEY
+  scopes           ->   SCOPES
+  handle           ->   SHOPIFY_APP_HANDLE
+  application_url  ->   SHOPIFY_APP_URL
+
+  (only for shopify)
+  embedded 
+  name
+  webhooks
+  etc... 
+
+
+
+```
+
+# Useful commands
+
+1. check which shopify.app.xyz.toml file is being used:
+```
+% shopify app info
+```
+2. choose the which of these toml files to use:
+```
+% shopify app config use
+```
+3. trigger webhooks for testing
+```
+% shopify app webhook trigger
+?  Webhook Topic:
+✔  app/uninstalled
+
+?  Delivery method:
+✔  HTTP
+
+?  Address for delivery:
+https://dev-tunnel.minder.solutions/webhooks/app/uninstalled
+```
+
 
 # Initial Consideratins
 This package updated to react router and removed all the react polaris stuff in favor of the web components which are included in the shopify app rr bundle (I think?). 
