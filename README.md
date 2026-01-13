@@ -98,6 +98,14 @@ The environment variables can come from more than one place.
 https://dev-tunnel.minder.solutions/webhooks/app/uninstalled
 ```
 
+4. check if the uninstall removes the session data for the shop
+
+```
+--local
+npx wrangler kv key list --binding=SESSIONS_KV --local
+
+```
+
 
 # Initial Consideratins
 This package updated to react router and removed all the react polaris stuff in favor of the web components which are included in the shopify app rr bundle (I think?). 

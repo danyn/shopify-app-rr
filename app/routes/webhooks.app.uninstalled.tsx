@@ -1,5 +1,9 @@
-import type { ActionFunctionArgs } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { authenticate, getSessionStorage } from "app/shopify.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return new Response("Unauthorized", { status: 401 });
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { shop, session, topic } = await authenticate.webhook(request);
