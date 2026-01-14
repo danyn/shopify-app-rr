@@ -23,9 +23,10 @@ type GetLoadContextArgs = {
   };
 };
 
-declare module "@remix-run/cloudflare" {
+declare module "@react-router/cloudflare" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AppLoadContext extends ReturnType<typeof getLoadContext> {
+    // allow  context in your loaders/actions, TypeScript knows it has context.cloudflare.env,
     // This will merge the result of `getLoadContext` into the `AppLoadContext`
   }
 }

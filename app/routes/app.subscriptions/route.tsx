@@ -38,7 +38,7 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
 
   const { admin, redirect, billing, session } = await authenticate.admin(request);
 
-  const billingCheck = await billing.check();
+  const billingCheck = await (billing.check as any)();
   const subscription = billingCheck?.appSubscriptions?.[0];
   const appInstallation = await availableIfMetafields(admin.graphql, subscription?.name);
 
