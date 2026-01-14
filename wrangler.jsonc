@@ -1,6 +1,7 @@
 {
   "name": "cf-nutrition-and-recipes",
   "compatibility_date": "2025-04-01",
+  // https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
   "compatibility_flags": [
     "nodejs_compat"
   ],

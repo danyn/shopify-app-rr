@@ -54,11 +54,18 @@ const getShopifyApp = () => {
     return globalThis.shopifyAppInstance;
   }
 
+  /**
+   nodejs_compat compatibility flag is set in wrangler.jsonc:4-6.
+   https://developers.cloudflare.com/workers/runtime-apis/nodejs/process/#processenv
+  */
+  // @ts-ignore - process.env available via nodejs_compat
+  const { SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SCOPES, SHOPIFY_APP_URL } = process.env;
+
   const shopifyConfig = {
-    apiKey: process.env.SHOPIFY_API_KEY || "",
-    apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
-    scopes: process.env.SCOPES?.split(",") || [],
-    appUrl: process.env.SHOPIFY_APP_URL || "",
+    apiKey: SHOPIFY_API_KEY || "",
+    apiSecretKey: SHOPIFY_API_SECRET || "",
+    scopes: SCOPES?.split(",") || [],
+    appUrl: SHOPIFY_APP_URL || "",
     distribution: AppDistribution.AppStore,
     apiVersion: ApiVersion.July23,
     isEmbeddedApp: true,
