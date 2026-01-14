@@ -32,6 +32,8 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 }
 
 export async function loader({ request, context, params }: LoaderFunctionArgs) {
+  /* Expliclicitly type this because its not working any other way */
+  const env = context.cloudflare.env as Env;
   // Get charge_id from query parameters
   const url = new URL(request.url);
   const chargeId = url.searchParams.get('charge_id');
@@ -48,7 +50,7 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
 
   /* Keep track of when people subscribe using D1 in order to send a reminder email */
   if (chargeId) {
-    const db_subscriptions = drizzle(context.cloudflare.env.DB_SUBSCRIPTIONS);
+    const db_subscriptions = drizzle(env.DB_SUBSCRIPTIONS);
     type Subscriber = typeof subscriptionTracking.$inferInsert;
     const entry: Subscriber = {
       shopifySubscriptionId: subscription.id,
@@ -74,16 +76,16 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
       });
   }
 
-  const appUrl = getAppUrl({ appId: context.cloudflare.env?.SHOPIFY_APP_ID, appHandle: context.cloudflare.env?.SHOPIFY_APP_HANDLE });
-  return { billingCheck, subscription, chargeId, appInstallation, appUrl }
+  const appUrl = getAppUrl({ appId: env?.SHOPIFY_APP_ID, appHandle: env?.SHOPIFY_APP_HANDLE });
+  return { billingCheck, subscription, chargeId, appInstallation, appUrl, env, context}
 };
 
 export default function Subscription() {
 
-  const L = useLoaderData<typeof loader>();
+  const lData = useLoaderData<typeof loader>();
 
 
-  const subscription = L.subscription;
+  const subscription = lData.subscription;
   let name, status, titleText, trialDays;
 
 
@@ -95,11 +97,11 @@ export default function Subscription() {
     trialDays = getCurrentTrialDays(subscription);
 
   }
-  if (!L.billingCheck?.hasActivePayment) {
+  if (!lData.billingCheck?.hasActivePayment) {
     titleText = "Please select a plan"
   } else if (subscription) {
     if (name) {
-      titleText = `You are on the ${name} plan. ${L.chargeId ? '🎉' : ''}`
+      titleText = `You are on the ${name} plan. ${lData.chargeId ? '🎉' : ''}`
 
     }
   }
@@ -115,17 +117,17 @@ export default function Subscription() {
         >
           <s-box border="none" padding="none none small none">
             {
-              !L.billingCheck?.hasActivePayment &&
+              !lData.billingCheck?.hasActivePayment &&
               <s-paragraph>
                 We’ve got you covered — start free, grow with Hobby, or go Pro.
               </s-paragraph>
             }
             {
-              name === starterName && !!!L.chargeId &&
+              name === starterName && !!!lData.chargeId &&
               <s-paragraph> Your plan is currently limited to Nutriscores. Upgrade to All Access for unlimited use.</s-paragraph>
             }
             {
-              L.chargeId &&
+              lData.chargeId &&
               <s-paragraph>Thank you for subscribing to Tidy Product Blocks! Your plan is now active. If you have any questions or need help, we're here for you. Enjoy!</s-paragraph>
             }
             {
@@ -134,7 +136,7 @@ export default function Subscription() {
             }
           </s-box>
           <s-button variant="secondary"
-            href={L.appUrl?.pricingPlans}
+            href={lData.appUrl?.pricingPlans}
             target="_top"
           >
             Manage plans
