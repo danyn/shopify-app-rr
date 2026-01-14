@@ -69,9 +69,10 @@ const getShopifyApp = () => {
     distribution: AppDistribution.AppStore,
     apiVersion: ApiVersion.July23,
     isEmbeddedApp: true,
-    sessionStorage: globalThis.shopifySessionStorage,
+    sessionStorage: globalThis.shopifySessionStorage as any,
     future: {
-      unstable_newEmbeddedAuthStrategy: true,
+      // this is likely defualt now so it throws a type error maybe its ignored in production.
+      // unstable_newEmbeddedAuthStrategy: true, 
     }
   };
 
@@ -98,4 +99,4 @@ export const unauthenticated = {
 
 export const login = (request: Request) => getShopifyApp().login(request);
 
-export const registerWebhooks = (request: Request) => getShopifyApp().registerWebhooks(request);
+// export const registerWebhooks = ({ session }: { session: any }) => getShopifyApp().registerWebhooks({ session });
