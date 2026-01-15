@@ -36,28 +36,37 @@ The feature ensures that:
 
 ## Architecture & File Structure
 
+**Consolidated Design** - All subscription logic is centralized in the features folder:
+
 ```
 app/
 ├── features/
 │   └── subscriptions/
+│       ├── index.ts                  # 🎯 Single entry point - minimal exports
 │       ├── constants.ts              # Subscription definitions & namespace
-│       ├── appInstallationBilling.ts # Metafield read/validation logic
+│       ├── appInstallationBilling.ts # Metafield read & trial day calculations
+│       ├── billingRedirect.ts        # Middleware redirect logic
+│       ├── appData.ts                # Metafield upsert & synchronization
 │       └── about.md                  # This documentation
 │
 ├── routes/
 │   ├── app._m/
-│   │   ├── route.tsx                 # Middleware wrapper
-│   │   └── billingRedirect.ts        # Redirect logic for missing subscriptions
+│   │   └── route.tsx                 # Imports: billingRedirect from features
 │   │
 │   └── app.subscriptions/
-│       ├── route.tsx                 # Subscription management UI
-│       └── appData.ts                # Metafield upsert logic
+│       └── route.tsx                 # Imports: availableIfMetafields, constants
 │
 extensions/
 └── theme-extension/
     └── blocks/
         └── show_subscriptions.liquid # Demo block using availableIf
 ```
+
+**Key Principles:**
+- ✅ **Tightly coupled** - All files in `features/subscriptions/` use relative imports (`./`)
+- ✅ **Minimal exports** - Only `index.ts` exports to outside world
+- ✅ **Clean boundaries** - Routes import only from `features/subscriptions` index
+- ✅ **Single source of truth** - All subscription logic lives in one folder
 
 ---
 
@@ -168,9 +177,34 @@ export const subscriptions = [
 
 ---
 
+### Metafield Synchronization
+
+**File:** [`appData.ts`](app/features/subscriptions/appData.ts)
+
+**`availableIfMetafields()`** - Exported via index.ts
+- Main orchestrator for metafield synchronization
+- Checks if update needed via `shouldUpdate()`
+- Calls `upsertMetafields()` to set feature flags
+
+**`upsertMetafields()`** - Internal function
+- Uses `metafieldsSet` GraphQL mutation
+- Sets current subscription → `true`
+- Sets all other subscriptions → `false`
+- Enables conditional theme blocks
+
 ### Subscription Route
 
 **File:** [`route.tsx`](app/routes/app.subscriptions/route.tsx)
+
+**Imports from `features/subscriptions`:**
+```typescript
+import { 
+  availableIfMetafields, 
+  allAccessName, 
+  starterName, 
+  getCurrentTrialDays 
+} from 'app/features/subscriptions';
+```
 
 #### Loader Flow:
 1. Authenticate and check billing status
@@ -178,26 +212,19 @@ export const subscriptions = [
 3. If `?charge_id` query param exists:
    - Insert/update D1 database with subscription details
    - Used for email reminder tracking
-4. Return subscription data + app URLs
+4. Return subillingRedirect.ts`](app/features/subscriptions/billingRedirect.ts)  
+**Used by:** [`app._m/route.tsx`](app/routes/app._m/route.tsx)
+
+**Import:**
+```typescript
+import { billingRedirect } from 'app/features/subscriptions';
+```
 
 #### UI Display:
 - Shows current plan name and status
 - Displays trial days remaining (if applicable)
 - Provides "Manage plans" button → Shopify managed pricing
 - Success banner when returning with `charge_id`
-
-**File:** [`appData.ts`](app/routes/app.subscriptions/appData.ts)
-
-**`availableIfMetafields()`**
-- Main orchestrator for metafield synchronization
-- Checks if update needed via `shouldUpdate()`
-- Calls `upsertMetafields()` to set feature flags
-
-**`upsertMetafields()`**
-- Uses `metafieldsSet` GraphQL mutation
-- Sets current subscription → `true`
-- Sets all other subscriptions → `false`
-- Enables conditional theme blocks
 
 ---
 
@@ -305,56 +332,63 @@ Only merchants with "All Access" subscription can add this block to their theme.
 │ Blocks appear/disappear based on     │
 │ availableIf condition                │
 └──────────────────────────────────────┘
-```
+```✅ Consolidated Architecture - Current Implementation
 
----
+**All subscription logic is now centralized in `features/subscriptions/`**
 
-## Design Evaluation
+**Strengths:**
 
-### Current Architecture: Split Design
+1. **Single Source of Truth** 🎯
+   - Every subscription-related file lives in one folder
+   - No navigation between routes and features to understand flow
+   - Clear ownership and responsibility
 
-**Pros:**
-- ✅ **Clear separation of concerns** - Features vs Routes vs Extensions
-- ✅ **Reusable logic** - `appInstallationBilling.ts` and `appData.ts` are pure functions
-- ✅ **Testable** - Business logic isolated from React components
-- ✅ **Scalable** - Easy to add new subscription tiers in `constants.ts`
-- ✅ **Middleware pattern** - Billing checks happen automatically via `app._m`
+2. **Tight Coupling with Clean Boundaries** 🔒
+   - Internal files use relative imports (`./`)
+   - External consumers import only from `index.ts`
+   - Minimal public API surface - only what's needed is exported
 
-**Cons:**
-- ⚠️ **Fragmented context** - Need to navigate 3+ files to understand full flow
-- ⚠️ **Tight coupling** - Constants must be synchronized with Shopify Admin
-- ⚠️ **Hidden dependencies** - `appData.ts` imports from `appInstallationBilling.ts`
+3. **Maintainability** 🛠️
+   - Add new subscription tiers: edit `constants.ts`
+   - Modify billing logic: all in `features/subscriptions/`
+   - No scattered updates across route folders
 
-### Recommendation: **Keep the Current Split Design** ✅
+4. **Testability** ✅
+   - Business logic isolated from React components
+   - Pure functions in `appInstallationBilling.ts` and `appData.ts`
+   - Mock-friendly: routes receive functions, not implementations
 
-**Reasoning:**
+5. **Explicit Dependencies** 📦
+   ```typescript
+   // Routes import from single entry point
+   import { 
+     billingRedirect, 
+     availableIfMetafields, 
+     getCurrentTrialDays 
+   } from 'app/features/subscriptions';
+   ```
 
-1. **Domain-Driven Structure**: The split mirrors real-world boundaries:
-   - `features/subscriptions/` = Business logic & data access
-   - `routes/app.subscriptions/` = UI presentation & user interaction
-   - `routes/app._m/` = Cross-cutting concern (middleware)
+**File Responsibilities:**
 
-2. **Single Responsibility**: Each file has one job:
-   - `constants.ts` → Configuration
-   - `appInstallationBilling.ts` → Read operations
-   - `appData.ts` → Write operations
-   - `billingRedirect.ts` → Authorization
-   - `route.tsx` → Presentation
+| File | Purpose | Exports | Used By |
+|------|---------|---------|---------|
+| `index.ts` | Public API | Named exports only | Routes |
+| `constants.ts` | Configuration | Via index.ts | Internal + Routes |
+| `appInstallationBilling.ts` | Read operations | Via index.ts | Internal + Routes |
+| `appData.ts` | Write operations | Via index.ts | app.subscriptions route |
+| `billingRedirect.ts` | Authorization | Via index.ts | app._m route |
 
-3. **React Router Best Practices**: Follows the framework's conventions for route-specific code vs shared features.
+**Trade-offs:**
 
-4. **Future Maintenance**: When subscription logic grows (e.g., usage-based billing, proration), the feature folder can expand without bloating route files.
+✅ **Gained:**
+- Cohesive feature module
+- Clear import paths
+- Easy to reason about
+- Future-proof for billing complexity
 
-### Design Improvement Suggestions:
-
-If consolidation is desired, create a **facade pattern**:
-
-```typescript
-// app/features/subscriptions/index.ts
-export * from './constants';
-export * from './appInstallationBilling';
-export { availableIfMetafields } from '../routes/app.subscriptions/appData';
-export { billingRedirect } from '../routes/app._m/billingRedirect';
+⚠️ **Considerations:**
+- Routes still reference feature for business logic (acceptable dependency)
+- Constants must stay in sync with Shopify Admin (documented requirement)ort { billingRedirect } from '../routes/app._m/billingRedirect';
 ```
 
 This provides a single import point while maintaining file separation:

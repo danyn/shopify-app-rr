@@ -1,3 +1,14 @@
+/**
+ * App Installation Billing & Metafield Read Operations
+ * 
+ * This module handles reading subscription state from Shopify's Billing API
+ * and app installation metafields. Contains validation and calculation logic.
+ * 
+ * INTERNAL MODULE - Selected functions exported via index.ts
+ * @see appMetafieldRead - Queries app installation metafields
+ * @see getCurrentTrialDays - Calculates remaining trial days dynamically
+ */
+
 import { namespace, allAccessKey, starterKey, monthlyKey, yearlyKey } from "./constants";
 import { queryResource } from "../../resources/gql/queryResource";
 import { handleize } from "../../resources/utils";

@@ -1,10 +1,8 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, HeadersFunction } from "react-router";
 import { useLoaderData } from "react-router";
 import { authenticate } from "../../shopify.server";
-import { getAppUrl } from "app/features/resource-locations/appUrl";
-import { availableIfMetafields } from "./appData";
-import { allAccessName, starterName } from "app/features/subscriptions/constants";
-import { getCurrentTrialDays } from "app/features/subscriptions/appInstallationBilling";
+import { getAppUrl } from "~/features/resource-locations/appUrl";
+import { availableIfMetafields, allAccessName, starterName, getCurrentTrialDays } from "~/features/subscriptions";
 import { subscriptionTracking } from 'drizzle-db/schema'
 import { drizzle } from 'drizzle-orm/d1';
 import { boundary } from "@shopify/shopify-app-react-router/server";

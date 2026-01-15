@@ -1,6 +1,16 @@
+/**
+ * App Installation Metafield Synchronization
+ * 
+ * This module handles writing subscription state to app installation metafields.
+ * These metafields act as feature flags for theme extension conditional blocks.
+ * 
+ * INTERNAL MODULE - Only exported via index.ts
+ * @see availableIfMetafields - Main function exported for app.subscriptions route
+ */
+
 import { queryResource } from "app/resources/gql/queryResource";
-import { subscriptions, namespace, } from "app/features/subscriptions/constants";
-import { appMetafieldRead, shouldUpdate } from "app/features/subscriptions/appInstallationBilling";
+import { subscriptions, namespace, } from "./constants";
+import { appMetafieldRead, shouldUpdate } from "./appInstallationBilling";
 
 /**
  * * @description 

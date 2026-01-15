@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from "react-router";
 import { Outlet, useLoaderData, HeadersFunction } from "react-router";
 import { authenticate } from "app/shopify.server";
 import { ShouldRevalidateFunction } from "react-router";
-import billingRedirect from "./billingRedirect";
+import { billingRedirect } from "~/features/subscriptions";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 
 /** every route needs this due to single fetch

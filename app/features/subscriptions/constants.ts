@@ -1,3 +1,13 @@
+/**
+ * Subscription Configuration Constants
+ * 
+ * ⚠️ CRITICAL: These values MUST match exactly with Shopify Admin managed pricing
+ * Any changes to subscription names/keys in Partner Dashboard must be reflected here.
+ * 
+ * INTERNAL MODULE - Selected constants exported via index.ts
+ * @see https://shopify.dev/docs/apps/launch/billing/managed-pricing
+ */
+
 export const namespace = 'subscription';
 
 export const monthlyName = 'Monthly';

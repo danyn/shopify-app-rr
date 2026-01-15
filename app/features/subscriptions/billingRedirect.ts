@@ -1,5 +1,15 @@
+/**
+ * Billing Redirect Middleware Logic
+ * 
+ * This module protects routes by checking subscription status and redirecting
+ * users to pricing pages or subscription setup when needed.
+ * 
+ * INTERNAL MODULE - Only exported via index.ts as default export
+ * @see billingRedirect - Function used by app._m middleware route
+ */
+
 import {getAppUrl} from 'app/features/resource-locations/appUrl';
-import { appMetafieldRead, shouldUpdate } from 'app/features/subscriptions/appInstallationBilling';
+import { appMetafieldRead, shouldUpdate } from './appInstallationBilling';
 import type { BillingType, RedirectType, GraphqlType } from 'app/resources/shared-types';
 
 /**
