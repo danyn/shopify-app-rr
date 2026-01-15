@@ -1,0 +1,1 @@
+[create metaobject definitions](https://shopify.dev/docs/apps/build/metaobjects/manage-metaobject-definitions#creating-definitions)

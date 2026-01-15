@@ -32,12 +32,6 @@ type QueryResource<T> = {
 
 type Mode = 'query' | 'mutation';
 
-// @todo this should be removed in favor of autocomplete on the type above
-export const mode = {
-  query: 'query',
-  mutate: 'mutation',
-}
-
 /**
 @description
  Return the resource from a graphql query.

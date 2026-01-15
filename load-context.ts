@@ -5,7 +5,7 @@ import { initKvSessionStorage } from './app/shopify.server';
  * load-context.ts
  * 
  * In a Cloudflare Workers environment. This file is responsible for setting up the 
- * request context for the React Router app's loader's and actions.
+ * request context for the React Router app's loaders and actions.
  * 
  * 
  * It is also being used to pass a reference to the KV binding into globalThis

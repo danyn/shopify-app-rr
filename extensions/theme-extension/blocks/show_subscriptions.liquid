@@ -1,0 +1,41 @@
+{% comment %} /Users/danynfidel/GitHub/shopify-app-templates/shopify-app-rr/app/features/subscriptions/constants.ts {% endcomment %}
+<h1>The conditional metafield for subscription</h1>
+<div class="show" style="display:grid; direction:column;">
+  <div>monthly: {{ app.metafields.subscription.monthly }}</div>
+  <div>yearly: {{ app.metafields.subscription.yearly }}</div>
+  <div>starter: {{ app.metafields.subscription.starter }}</div>
+  <div>all_access: {{ app.metafields.subscription.all_access }}</div>
+  <div>not_defined: {{ app.metafields.subscription.xyz | json}}</div>
+   
+  
+  
+  <div>
+  <h2>this is how you make a conditional block:</h2>
+  <pre>
+    {% raw %}
+      {% schema %}
+      {
+        "name": "Show subscriptions",
+        "available_if": "{{ app.metafields.subscription.all_access}}",
+        "target": "section",
+        "settings": []
+      }
+      {% endschema %}
+    {% endraw %}
+    </pre>
+  </div>
+
+</div>
+
+
+
+
+
+{% schema %}
+{
+  "name": "Show subscriptions",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}
+
