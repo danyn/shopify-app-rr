@@ -7,7 +7,6 @@ const APP_NAME = "Shopify App Template - Cloudflare Workers";
 const APP_HANDLE = "cf-worker-shopify";
 
 
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
 
@@ -30,10 +29,10 @@ export default function App() {
   <AppProvider>
     <s-page heading="Shopify App Template">
       <s-box border="none" padding="large">
-        <s-stack direction="column" gap="large">
+        <s-stack  gap="large">
           {/* Welcome Card */}
           <s-box border="base" padding="large">
-            <s-stack direction="column" gap="medium">
+            <s-stack  gap="large">
               <s-heading>Welcome to Shopify App Template - Cloudflare Workers</s-heading>
               <div style={{ 
                 textAlign: 'center',
@@ -49,7 +48,7 @@ export default function App() {
               </s-paragraph>
               <s-paragraph>
                 Just enter your shopify domain below and click log in. For example{' '}
-                <s-link url="https://admin.shopify.com/apps/bulk-product-categories/app">
+                <s-link href="https://admin.shopify.com/apps/some-app/app">
                   example-store.myshopify.com
                 </s-link>.
               </s-paragraph>
@@ -59,18 +58,17 @@ export default function App() {
           {/* Login Form Card */}
           {showForm && (
             <s-box border="base" padding="large">
-              <s-stack direction="column" gap="medium">
-                <s-heading level="2">Login to your Shopify store</s-heading>
+              <s-stack  gap="large">
+                <s-heading>Login to your Shopify store</s-heading>
                 <Form method="post" action="/auth/login">
-                  <s-stack direction="column" gap="medium">
+                  <s-stack gap="large">
                     <s-text-field
                       label="Shop domain"
-                      type="text"
                       name="shop"
                       help-text="e.g: example-store.myshopify.com"
                       auto-complete="off"
                     />
-                    <s-button variant="primary" submit>
+                    <s-button variant="primary" type="submit">
                       Log in
                     </s-button>
                   </s-stack>
@@ -83,7 +81,7 @@ export default function App() {
           <s-box border="base" padding="large">
             <s-paragraph>
               For information about how we handle your data, please review our{' '}
-              <s-link onclick={handlePrivacyPolicyClick}>
+              <s-link onClick={handlePrivacyPolicyClick}>
                 Privacy Policy
               </s-link>
               .

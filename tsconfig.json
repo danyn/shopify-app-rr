@@ -16,7 +16,7 @@
       "@react-router/cloudflare",
       "@cloudflare/workers-types",
       "vite/client",
-      "@shopify/app-bridge-ui-types"
+      "@shopify/polaris-types"
     ],
     "isolatedModules": true,
     "esModuleInterop": true,
