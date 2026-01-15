@@ -13,7 +13,7 @@ export function useClientLog() {
     if (process.env.NODE_ENV !== "development") return;
     console.log("%c=== Loader Data ===", "color: teal; font-weight:bold;");
     matches.forEach((match, index) => {
-      console.log(`${index})${match.id}:`, match.data);
+      console.log(`${index})${match.id}:`, match.loaderData);
     });
   }, [matches]);
 }

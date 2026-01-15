@@ -381,19 +381,6 @@ export default async function handleRequest(request, ...) {
 
 **Purpose**: Cloudflare Workers CLI - deploy, manage, and test Workers.
 
-**⚠️ CRITICAL VERSION NOTE** (from `package.json`):
-```json
-"myBuildNoteWrangler": {
-  "wrangler-versions": "on the main branch wrangler needs to be at 4, when running cf:dev wrangler needs to be at 3",
-  "never": "push the package.lock file to origin main and always make sure wrangler is at 4 on origin main",
-  "reason": "The cloudflare github app deploys to the cloudflare worker from origin main. It needs wrangler 4 for its build and it will fail without it. Remix run dev needs wrangler at 3 for the local tunnel."
-}
-```
-
-**Why different versions**:
-- **Production (Wrangler 4)**: CI/CD deployments require Wrangler 4
-- **Development (Wrangler 3)**: Shopify CLI's tunnel integration requires Wrangler 3
-
 **Note**: The `cloudflareDevProxy` in `vite.config.ts` is present but NOT used during active development because the app uses Shopify CLI commands instead of `npm run dev`.
 
 **Used in scripts**:
@@ -402,8 +389,8 @@ export default async function handleRequest(request, ...) {
 "typegen": "wrangler types",
 "cf:tunnel": "cloudflared tunnel run --token $CF_TUNNEL_TOKEN",
 "cf:dev": "shopify app dev --tunnel-url https://dev-tunnel.minder.solutions:5500",
-"db:migrate:subscriptions:production": "npx wrangler@4 d1 migrations apply DB_SUBSCRIPTIONS --remote",
-"db:migrate:subscriptions:development": "npx wrangler@4 d1 migrations apply DB_SUBSCRIPTIONS --local"
+"db:migrate:subscriptions:production": "wrangler d1 migrations apply DB_SUBSCRIPTIONS --remote",
+"db:migrate:subscriptions:development": "wrangler d1 migrations apply DB_SUBSCRIPTIONS --local"
 ```
 
 #### Workers Types (`@cloudflare/workers-types`)
@@ -618,7 +605,7 @@ D1 HTTP API (production) or Local SQLite (dev)
 [Development]
 npm run dev
     ↓
-react-router dev (Vite + Wrangler 3)
+react-router dev (Vite)
     ↓
 cloudflareDevProxy() - simulate Workers env
     ↓
@@ -635,7 +622,7 @@ Vite bundle → /build/client (static assets)
     ↓
 React Router SSR → /build/server/index.js
     ↓
-wrangler deploy (Wrangler 4)
+wrangler deploy
     ↓
 Cloudflare Workers
 ```
@@ -779,28 +766,22 @@ npm run drizzle:studio
 
 ## Notes and Gotchas
 
-### 1. Wrangler Version Management
-- **Never commit `package-lock.json` with Wrangler 3 to main branch**
-- Main branch requires Wrangler 4 for CI/CD
-- Development requires Wrangler 3 for `cloudflareDevProxy`
-- Use `npx wrangler@4` in migration scripts
-
-### 2. Node.js Compatibility
+### 1. Node.js Compatibility
 - Workers runtime is V8 (not Node.js)
 - `nodejs_compat` flag in `wrangler.jsonc` enables `process.env`, `crypto`, etc.
 - Required by `@shopify/shopify-app-react-router`
 
-### 3. Type Safety
+### 2. Type Safety
 - `worker-configuration.d.ts` defines `Env` interface
 - `load-context.ts` types aren't perfectly inferred in routes
 - Use explicit type assertions: `const env = context.cloudflare.env as Env`
 
-### 4. Session Initialization
+### 3. Session Initialization
 - **Critical**: `initKvSessionStorage` must be called before `getShopifyApp()`
 - Happens in `load-context.ts` for every request
 - Uses `globalThis` for persistence across invocations
 
-### 5. Error Boundaries
+### 4. Error Boundaries
 - All routes must export `boundary.error` and `boundary.headers`
 - Required for Shopify-specific error handling
 - Ensures proper headers for App Bridge
@@ -978,24 +959,6 @@ shopify app dev --tunnel-url https://dev-tunnel.minder.solutions:5500
 ```bash
 npm run lh:dev     # shopify app dev --use-localhost
 ```
-
-### Version Management: The Wrangler Story
-
-This project has a unique version management situation documented in package.json:
-
-```json
-"myBuildNoteWrangler": {
-  "wrangler-versions": "on the main branch wrangler needs to be at 4, when running cf:dev wrangler needs to be at 3",
-  "never": "push the package.lock file to origin main",
-  "reason": "The cloudflare github app deploys from origin main. It needs wrangler 4 for build."
-}
-```
-
-**Why This Matters:**
-- Local dev: Uses Wrangler 3.x (better tunnel compatibility)
-- CI/CD production: Uses Wrangler 4.x (required by Cloudflare GitHub app)
-
-This is **unrelated to Shopify CLI** but shows that different tools in your stack can have version requirements independent of the CLI.
 
 ### Key Takeaways
 
