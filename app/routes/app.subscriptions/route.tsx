@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, HeadersFunction } from "re
 import { useLoaderData } from "react-router";
 import { authenticate } from "../../shopify.server";
 import { getAppUrl } from "~/features/resource-locations/appUrl";
-import { availableIfMetafields, allAccessName, starterName, getCurrentTrialDays } from "~/features/subscriptions";
+import { setAppSubscriptionFlags, allAccessName, starterName, getCurrentTrialDays } from "~/features/subscriptions";
 import { subscriptionTracking } from 'drizzle-db/schema'
 import { drizzle } from 'drizzle-orm/d1';
 import { boundary } from "@shopify/shopify-app-react-router/server";
@@ -40,7 +40,7 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
 
   const billingCheck = await (billing.check as any)();
   const subscription = billingCheck?.appSubscriptions?.[0];
-  const appInstallation = await availableIfMetafields(admin.graphql, subscription?.name);
+  const appInstallation = await setAppSubscriptionFlags(admin.graphql, subscription?.name);
 
   if (appInstallation.appInstallation.hasErrors.signal) {
     throw new Response('Cannot read from the app installation. Please check network connections and try refreshing your browser.')

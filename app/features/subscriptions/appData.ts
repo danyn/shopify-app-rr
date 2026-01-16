@@ -14,15 +14,15 @@ import { appMetafieldRead, shouldUpdate } from "./appInstallationBilling";
 
 /**
  * * @description 
- * This function retrieves the appInstallation which is a resource for storing metafields on.
- * It then checks that there is metafield to indicate which plan is selected.
- * This metafield is a feature flag used for the availableIf property in liquid schema
+ * Purpose: Create feature flags by setting metafields on the appInstallation resource that store the current subscription as name:bool 
+ * Process: Retrieve the appInstallation and check that there is a metafield to indicate which plan is selected.
+ * This metafield supplies the value for the availableIf property in a liquid block's schema section
  * When there a many plans it sets the flags for the current one to true and all the others to false.
  * @see https://shopify.dev/docs/apps/build/online-store/theme-app-extensions/configuration#conditional-app-blocks
  * @see https://shopify.dev/docs/apps/build/custom-data/ownership#step-2-create-an-app-data-metafield
  * 
  */
-export async function availableIfMetafields(graphql: any, subscriptionName: string) {
+export async function setAppSubscriptionFlags(graphql: any, subscriptionName: string) {
   const appInstallation = await appMetafieldRead({
     graphql,
   });
@@ -53,7 +53,7 @@ async function upsertMetafields(graphql: any, subscriptionName: string, ownerId:
 }
 /*
 @description:
-Set all metafields that are for featureFlags (avialableIf: liquid schema)
+return the GQL variable needed to set all the metafields for featureFlags. These are used on the (avialableIf property in liquid schema)
 Set the feature flag for the current subscription to true and set all others to false.
 How:
 while iterating through the known subscription types

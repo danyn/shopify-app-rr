@@ -54,7 +54,7 @@ app/
 │   │   └── route.tsx                 # Imports: billingRedirect from features
 │   │
 │   └── app.subscriptions/
-│       └── route.tsx                 # Imports: availableIfMetafields, constants
+│       └── route.tsx                 # Imports: setAppSubscriptionFlags, constants
 │
 extensions/
 └── theme-extension/
@@ -103,7 +103,7 @@ extensions/
                            ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │ 3B. IF REDIRECT: /app/subscriptions route.tsx                  │
-│     - Loader runs availableIfMetafields()                       │
+│     - Loader runs setAppSubscriptionFlags()                       │
 │     - Sets proper metafield flags for subscription              │
 │     - Saves to D1 database (if charge_id present)              │
 │     - Shows subscription confirmation UI                        │
@@ -181,7 +181,7 @@ export const subscriptions = [
 
 **File:** [`appData.ts`](app/features/subscriptions/appData.ts)
 
-**`availableIfMetafields()`** - Exported via index.ts
+**`setAppSubscriptionFlags()`** - Exported via index.ts
 - Main orchestrator for metafield synchronization
 - Checks if update needed via `shouldUpdate()`
 - Calls `upsertMetafields()` to set feature flags
@@ -199,7 +199,7 @@ export const subscriptions = [
 **Imports from `features/subscriptions`:**
 ```typescript
 import { 
-  availableIfMetafields, 
+  setAppSubscriptionFlags, 
   allAccessName, 
   starterName, 
   getCurrentTrialDays 
@@ -208,17 +208,11 @@ import {
 
 #### Loader Flow:
 1. Authenticate and check billing status
-2. Call `availableIfMetafields()` to sync metafields
+2. Call `setAppSubscriptionFlags()` to sync metafields
 3. If `?charge_id` query param exists:
    - Insert/update D1 database with subscription details
    - Used for email reminder tracking
-4. Return subillingRedirect.ts`](app/features/subscriptions/billingRedirect.ts)  
-**Used by:** [`app._m/route.tsx`](app/routes/app._m/route.tsx)
 
-**Import:**
-```typescript
-import { billingRedirect } from 'app/features/subscriptions';
-```
 
 #### UI Display:
 - Shows current plan name and status
@@ -305,7 +299,7 @@ Only merchants with "All Access" subscription can add this block to their theme.
          │     route        │
          └────────┬─────────┘
                   │
-                  ├─→ availableIfMetafields()
+                  ├─→ setAppSubscriptionFlags()
                   │      │
                   │      └─→ upsertMetafields()
                   │             │
@@ -363,7 +357,7 @@ Only merchants with "All Access" subscription can add this block to their theme.
    // Routes import from single entry point
    import { 
      billingRedirect, 
-     availableIfMetafields, 
+     setAppSubscriptionFlags, 
      getCurrentTrialDays 
    } from 'app/features/subscriptions';
    ```
@@ -393,7 +387,7 @@ Only merchants with "All Access" subscription can add this block to their theme.
 
 This provides a single import point while maintaining file separation:
 ```typescript
-import { availableIfMetafields, getCurrentTrialDays } from 'app/features/subscriptions';
+import { setAppSubscriptionFlags, getCurrentTrialDays } from 'app/features/subscriptions';
 ```
 
 ---

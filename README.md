@@ -28,7 +28,7 @@ For more info see KV_SETUP_GUIDE.md
 - subscriptions are handled at this route: 'app/routes/app.subscriptions'
 - This route does two things
   1. It will create a metafield on the appInstallation that is used to check if there is an active subscription in liquid blocks. 
-  - availableIfMetafields() handles this task.
+  - setAppSubscriptionFlags() handles this task.
   - all routes nested under 'app._m' redirect to this loader if they don't find the metafield in place.
   2. Subscriptions can be tracked by inserting subscribed users into a d1 instance when shopify redirects them back to the loader.  When there is a chargeId it means subcribed. This is only useful if you want to later query the d1 to get subscription info in order to communicate with the shop by way of email etc. currently there is a package that communicates using email+sendgrid+offlineToken that queries this endpoint 'app/routes/q.email-address'.
     - the d1 table is defined here: 'drizzle-db/schema/subscriptions.ts'

@@ -29,7 +29,7 @@ export {
 
 /**
  * Reads app installation metafields to check subscription status
- * Used by: billingRedirect, availableIfMetafields
+ * Used by: billingRedirect, setAppSubscriptionFlags
  */
 export { appMetafieldRead } from './appInstallationBilling';
 
@@ -55,4 +55,4 @@ export { default as billingRedirect } from './billingRedirect';
  * Sets feature flags for conditional theme blocks (availableIf)
  * Used by: app.subscriptions route
  */
-export { availableIfMetafields } from './appData';
+export { setAppSubscriptionFlags } from './appData';
