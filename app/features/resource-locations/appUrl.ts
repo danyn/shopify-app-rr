@@ -21,7 +21,40 @@ export function getAppUrl ({appId, appHandle} : Param ) {
     subscriptions: '/app/subscriptions',
     pricingPlans: `https://admin.shopify.com/charges/${appHandle}/pricing_plans`,
     m: 'routes/app._m',
-    adminProductIndexNutriscore: `shopify:admin/products?metafields.${appNamespace}.nutriscore=A%2CB%2CC%2CD%2CE`
+    adminProductIndexNutriscore: `shopify:admin/products?metafields.${appNamespace}.nutriscore=A%2CB%2CC%2CD%2CE`,
+    /**
+     * Generate online store editor URL for a metaobject page
+     * @param shop - Shop domain (e.g., 'my-shop.myshopify.com')
+     * @param urlHandle - The urlHandle from the definition's onlineStore capability (e.g., 'pages')
+     * @param metaobjectType - The metaobject type without $app: prefix (e.g., 'custom_page')
+     * @param handle - The metaobject handle
+     */
+    metaobjectOnlineStoreEditor: ({
+      shop,
+      urlHandle,
+      metaobjectType,
+      handle,
+    }: {
+      shop: string;
+      urlHandle: string;
+      metaobjectType: string;
+      handle: string;
+    }) => {
+      const cleanShop = shop.replace('.myshopify.com', '');
+      // Construct the preview path:
+      const previewPath = `/pages/${urlHandle}/${handle}`;
+      return `https://admin.shopify.com/store/${cleanShop}/themes/current/editor?previewPath=${encodeURIComponent(previewPath)}`;
+    },
+    /**
+     * Admin URL for metaobject content entries
+     * @param shop - Shop domain (e.g., 'my-shop.myshopify.com')
+     * @param metaobjectType - The metaobject type without $app: prefix (e.g., 'custom_page')
+     */
+    metaobjectContentEntries: (shop: string, metaobjectType: string) => {
+      const cleanShop = shop.replace('.myshopify.com', '');
+      const fullTypeName = `app--${appId}--${metaobjectType}`;
+      return `https://admin.shopify.com/store/${cleanShop}/content/metaobjects/entries/${fullTypeName}`;
+    }
   };
 };
 

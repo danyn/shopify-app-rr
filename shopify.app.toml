@@ -24,3 +24,65 @@ redirect_urls = [ "https://cf-test-1.minder-solutions.workers.dev/auth" ]
 
 [pos]
 embedded = false
+
+# Metaobject Definitions
+[metaobjects.app.nutrition_panel]
+name = "Nutrition Panel"
+description = "Nutrition information for products"
+access.admin = "merchant_read_write"
+access.storefront = "public_read"
+capabilities.publishable = true
+
+[metaobjects.app.nutrition_panel.fields.name]
+name = "Name"
+type = "single_line_text_field"
+
+[metaobjects.app.nutrition_panel.fields.calories]
+name = "Calories"
+type = "number_integer"
+
+[metaobjects.app.nutrition_panel.fields.protein]
+name = "Protein (g)"
+type = "number_decimal"
+
+[metaobjects.app.nutrition_panel.fields.carbs]
+name = "Carbs (g)"
+type = "number_decimal"
+
+[metaobjects.app.nutrition_panel.fields.product_reference]
+name = "Product"
+type = "product_reference"
+
+[metaobjects.app.recipe]
+name = "Recipe"
+description = "Recipe content for articles"
+access.admin = "merchant_read_write"
+access.storefront = "public_read"
+capabilities.publishable = true
+
+[metaobjects.app.recipe.fields.title]
+name = "Title"
+type = "single_line_text_field"
+
+[metaobjects.app.recipe.fields.description]
+name = "Description"
+type = "multi_line_text_field"
+
+[metaobjects.app.recipe.fields.cook_time]
+name = "Cook Time (minutes)"
+type = "number_integer"
+
+[metaobjects.app.recipe.fields.article_reference]
+name = "Article"
+type = "article_reference"
+
+# Metafield Definitions
+[product.metafields.app.nutrition_panel]
+name = "Nutrition Panel"
+description = "Link to nutrition panel metaobject"
+type = "metaobject_reference"
+
+[article.metafields.app.recipe]
+name = "Recipe"
+description = "Link to recipe metaobject"
+type = "metaobject_reference"

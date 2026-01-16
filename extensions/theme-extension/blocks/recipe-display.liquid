@@ -1,0 +1,36 @@
+{% assign recipe = article.metafields.app.recipe %}
+{% comment %} block.settings.recipe  {% endcomment %}
+{% if recipe %}
+  <div class="recipe-card" style="padding: 1.25rem; border: 1px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; background: #fff;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 1.25rem; font-weight: 600;">
+      {{ recipe.title.value }}
+    </h3>
+    
+    <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f9f9f9; border-radius: 4px;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-weight: 500;">⏱️ Cook Time:</span>
+        <span>{{ recipe.cook_time.value }} minutes</span>
+      </div>
+    </div>
+    
+    <div style="line-height: 1.6; color: #333;">
+      {{ recipe.description.value | newline_to_br }}
+    </div>
+  </div>
+{% endif %}
+
+{% comment %}     
+  {
+      "type": "metaobject",
+      "id": "recipe",
+      "label": "Recipe"
+    } {% endcomment %}
+{% schema %}
+{
+  "name": "Recipe Display",
+  "target": "section",
+  "settings": [
+
+  ]
+}
+{% endschema %}

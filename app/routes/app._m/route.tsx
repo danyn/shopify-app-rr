@@ -26,7 +26,7 @@ export async function loader ({ request, params, context }: LoaderFunctionArgs) 
 
 /**
  * This is a 'middleware' route across its <Outlet/>
- * Since single fetch is not enabled this route's loader is not guaranteed to finish first
+ * If single fetch is not enabled this route's loader is not guaranteed to finish first
  * However it will still return before the templates are rendered
  * @see https://remix.run/docs/en/main/file-conventions/routes#nested-layouts-without-nested-urls
  */

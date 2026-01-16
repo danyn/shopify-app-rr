@@ -6,8 +6,80 @@ handle = "cf-sf-app-0-dev"
 application_url = "https://dev-tunnel.minder.solutions"
 embedded = true
 
+
+##################
+# Metaobject Definitions
+[metaobjects.app.nutrition_panel]
+name = "Nutrition Panel"
+description = "Nutrition information for products"
+access.admin = "merchant_read_write"
+access.storefront = "public_read"
+capabilities.publishable = true
+
+[metaobjects.app.nutrition_panel.fields.name]
+name = "Name"
+type = "single_line_text_field"
+
+[metaobjects.app.nutrition_panel.fields.calories]
+name = "Calories"
+type = "number_integer"
+
+[metaobjects.app.nutrition_panel.fields.protein]
+name = "Protein (g)"
+type = "number_decimal"
+
+[metaobjects.app.nutrition_panel.fields.carbs]
+name = "Carbs (g)"
+type = "number_decimal"
+
+[metaobjects.app.nutrition_panel.fields.product_reference]
+name = "Product"
+type = "product_reference"
+
+[metaobjects.app.recipe]
+name = "Recipe"
+description = "Recipe content for articles"
+access.admin = "merchant_read_write"
+access.storefront = "public_read"
+capabilities.publishable = true
+
+[metaobjects.app.recipe.fields.title]
+name = "Title"
+type = "single_line_text_field"
+
+[metaobjects.app.recipe.fields.description]
+name = "Description"
+type = "multi_line_text_field"
+
+[metaobjects.app.recipe.fields.cook_time]
+name = "Cook Time (minutes)"
+type = "number_integer"
+
+[metaobjects.app.recipe.fields.article_reference]
+name = "Article"
+type = "article_reference"
+
+# https://shopify.dev/docs/apps/build/metaobjects/manage-metaobjects#step-1-create-definitions
+# https://shopify.dev/docs/apps/build/metafields#step-1-create-the-metafield-definition
+##############################
+# Metafield Definitions
+[product.metafields.app.nutrition_panel]
+name = "Nutrition Panel"
+description = "Link to nutrition panel metaobject"
+type = "metaobject_reference<$app:nutrition_panel>"
+
+[article.metafields.app.recipe]
+name = "Recipe"
+description = "Link to recipe metaobject"
+type = "metaobject_reference<$app:recipe>"
+
+[product.metafields.app--test.boolean]
+name = "Test a boolean"
+description = "test a boolean metafield"
+type = "boolean"
+
+
 [build]
-include_config_on_deploy = true
 automatically_update_urls_on_dev = false
 
 [webhooks]
@@ -21,10 +93,13 @@ api_version = "2025-04"
   topics = [ "app/scopes_update" ]
   uri = "/webhooks/app/scopes_update"
 
+
+
+
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-#scopes = "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations"
-scopes = "write_products"
+# https://shopify.dev/docs/api/usage/access-scopes
+scopes = "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations, read_products, write_products, read_content, write_content"
 [auth]
 redirect_urls = [ ]
 

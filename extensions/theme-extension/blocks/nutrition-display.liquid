@@ -1,0 +1,102 @@
+<style>
+  .nutrition-panel {
+    min-height: 12px;
+    border: 2px solid red;
+  }
+  pre {
+    max-width: 600px;
+    overflow: scroll;
+  }
+</style>
+{% comment %}
+ https://shopify.dev/docs/apps/build/online-store/theme-app-extensions/configuration#reserved-prefixes-for-metafields-and-metaobjects
+ https://shopify.dev/changelog/metafields-and-metaobjects-reserved-prefixes-now-supported-in-theme-app-extensions
+https://shopify.dev/docs/api/liquid/objects/metafield
+
+block.settings.product.metafields["$app:custom"].my_key.value
+
+
+nutrition = product.metafields.app--276599242753--nutrition_panel 
+nutrition = product.metafields.app.nutrition_panel.value 
+nutrition = block.settings.nutition_panel
+nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel
+ nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel.value
+ from examaple (didn't work) block.settings.product.metafields["$app:custom"].my_key.value
+{% endcomment %}
+{% assign nutrition = product.metafields["$app"].nutrition_panel.value %}
+{% assign test_boolen = product.metafields["$app:test"].boolean.value  %}
+{% assign mf =  product.metafields %}
+{% comment %} block.settings.nutrition_panel  product.metafields.app.nutrition_panel {% endcomment %}
+{% if 'nutrition' %}
+  <div
+    class="nutrition-panel"
+    style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; background: #fff;"
+  >
+
+    <pre>
+      <div> panel: {{ nutrition | json }}</div>
+      <div> test bool: {{  test_boolen | json }}</div>
+      <div>{{ mf | json }}</div>
+     
+    </pre>
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 1.125rem; font-weight: 600;">
+      {{ nutrition.name.value }}
+    </h3>
+
+    <div style="display: grid; gap: 0.5rem;">
+      <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
+        <span style="font-weight: 500;">Calories</span>
+        <span>{{ nutrition.calories.value }}</span>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
+        <span style="font-weight: 500;">Protein</span>
+        <span>{{ nutrition.protein.value }}g</span>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+        <span style="font-weight: 500;">Carbs</span>
+        <span>{{ nutrition.carbs.value }}g</span>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+{% comment %}
+  {
+    "type": "metaobject",
+    "id": "nutrition_panel",
+    "label": "Nutrition Panel"
+  }
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Nutrition Panel",
+  "target": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": true
+    },
+    {
+  "type": "metaobject",
+  "id": "nutition_panel",
+  "label": "Nutrition Panel",
+  "metaobject_type": "app--276599242753--nutrition_panel"
+  }
+  ]
+}
+{% endschema %}
+
+{% comment %}
+ 
+https://shopify.dev/docs/storefronts/themes/architecture/settings/input-settings 
+https://shopify.dev/docs/storefronts/themes/architecture/settings/input-settings#usage-in-apps
+https://admin.shopify.com/store/minder-test/content/metaobjects/entries/app--276599242753--nutrition_panel?selectedColumns=DISPLAY_NAME%2CFIELDS.NAME%2CFIELDS.CALORIES%2CFIELDS.PROTEIN%2CFIELDS.CARBS%2CFIELDS.PRODUCT_REFERENCE%2CADDED_BY%2CUPDATED_AT%2CREFERENCES&order=updated_at&orderDirection=DESCENDING
+https://admin.shopify.com/store/minder-test/settings/custom_data/metaobjects/app--276599242753--nutrition_panel
+https://shopify.dev/docs/apps/build/metaobjects/manage-metaobjects#step-1-create-definitions
+{% endcomment %}
