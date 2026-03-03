@@ -1,0 +1,16 @@
+{
+  "name": "Modifier les informations nutritionnelles",
+  "loading": "Chargement des données nutritionnelles...",
+  "save-button": "Enregistrer",
+  "cancel-button": "Annuler",
+  "name-label": "Nom du panneau",
+  "name-help": "Nom de ce panneau nutritionnel",
+  "name-error": "Veuillez entrer un nom",
+  "calories-label": "Calories",
+  "calories-help": "Calories totales",
+  "calories-error": "Veuillez entrer des calories valides",
+  "protein-label": "Protéines (g)",
+  "carbs-label": "Glucides (g)",
+  "grams-unit": "en grammes",
+  "field-error": "Veuillez entrer une valeur valide"
+}

@@ -1,17 +1,17 @@
 {
   "ratings": {
     "stars": {
-      "label": "Ratings"
+      "label": "Évaluations"
     },
     "home": {
-      "recommendationText": "Recommended Product!"
+      "recommendationText": "Produit recommandé!"
     }
   },
   "nutrition": {
     "panel": {
       "calories": "Calories",
-      "protein": "Protein",
-      "carbs": "Carbs",
+      "protein": "Protéines",
+      "carbs": "Glucides",
       "gramsUnit": "g"
     }
   }

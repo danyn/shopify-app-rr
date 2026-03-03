@@ -1,0 +1,15 @@
+{
+  "name": "valeur nutritive",
+  "welcome": "voir le tableau de la valeur nutritive",
+  "productName": "Nom du produit",
+  "calories": "Calories",
+  "protein": "Protéines",
+  "carbohydrates": "Glucides",
+  "caloriesUnit": "kcal",
+  "gramsUnit": "g",
+  "noData": "Aucune donnée nutritionnelle disponible pour ce produit.",
+  "loading": "Chargement des données nutritionnelles...",
+  "error": "Erreur",
+  "edit": "Modifier la valeur nutritive",
+  "add": "Ajouter des informations nutritionnelles"
+}

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "target": "ES2020",
+    "checkJs": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "noEmit": true,
+    "paths": {
+      "@local/extension-utils": ["../../packages/extension-utils/index.js"],
+      "@local/extension-utils/*": ["../../packages/extension-utils/src/*"]
+    }
+  }
+}

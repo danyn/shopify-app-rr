@@ -17,7 +17,7 @@ api_version = "2025-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products,read_locales,read_markets"
 
 [auth]
 redirect_urls = [ "https://cf-test-1.minder-solutions.workers.dev/auth" ]

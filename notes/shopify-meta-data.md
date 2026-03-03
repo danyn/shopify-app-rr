@@ -130,3 +130,5 @@ await createMetaobject({
 }, admin.graphql);
 ```
 
+## Admin ui extensions
+https://shopify.dev/docs/apps/build/admin/actions-blocks#admin-actions

@@ -7,7 +7,54 @@
     max-width: 600px;
     overflow: scroll;
   }
+  .locale-debug {
+    background: #f0f8ff;
+    border: 2px solid #4a90e2;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: monospace;
+    font-size: 14px;
+  }
 </style>
+
+{% comment %} Language and Region Detection {% endcomment %}
+<div class="locale-debug">
+  <h4 style="margin: 0 0 0.5rem 0; color: #2c3e50;">🌍 Locale Detection</h4>
+  
+  {% if localization %}
+    <div style="margin-bottom: 0.5rem;">
+      <strong>Language:</strong> {{ localization.language.endonym_name | capitalize }} ({{ localization.language.iso_code }})
+    </div>
+    
+    <div style="margin-bottom: 0.5rem;">
+      <strong>Country:</strong> {{ localization.country.name }} ({{ localization.country.iso_code }})
+    </div>
+    
+    <div style="margin-bottom: 0.5rem;">
+      <strong>Available Languages:</strong> {{ localization.available_languages.size }}
+    </div>
+    
+    <div style="margin-bottom: 0.5rem;">
+      <strong>Available Countries:</strong> {{ localization.available_countries.size }}
+    </div>
+    
+    {% comment %} Full JSON output for debugging {% endcomment %}
+    <details style="margin-top: 0.5rem;">
+      <summary style="cursor: pointer; color: #4a90e2;">View Full Localization Data</summary>
+      <pre style="margin-top: 0.5rem; background: #fff; padding: 0.5rem; border-radius: 4px; overflow-x: auto;">
+Language: {{ localization.language | json }}
+Country: {{ localization.country | json }}
+Available Languages: {{ localization.available_languages | json }}
+Available Countries: {{ localization.available_countries | json }}
+      </pre>
+    </details>
+  {% else %}
+    <div style="color: #e74c3c;">
+      ⚠️ Localization object not available
+    </div>
+  {% endif %}
+</div>
+
 {% comment %}
  https://shopify.dev/docs/apps/build/online-store/theme-app-extensions/configuration#reserved-prefixes-for-metafields-and-metaobjects
  https://shopify.dev/changelog/metafields-and-metaobjects-reserved-prefixes-now-supported-in-theme-app-extensions
@@ -23,9 +70,10 @@ nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel
  nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel.value
  from examaple (didn't work) block.settings.product.metafields["$app:custom"].my_key.value
 {% endcomment %}
+{% comment %} Get the nutrition panel metaobject reference {% endcomment %}
 {% assign nutrition = product.metafields["$app"].nutrition_panel.value %}
 {% assign test_boolen = product.metafields["$app:test"].boolean.value  %}
-{% assign mf =  product.metafields %}
+
 {% comment %} block.settings.nutrition_panel  product.metafields.app.nutrition_panel {% endcomment %}
 {% if 'nutrition' %}
   <div
@@ -36,7 +84,6 @@ nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel
     <pre>
       <div> panel: {{ nutrition | json }}</div>
       <div> test bool: {{  test_boolen | json }}</div>
-      <div>{{ mf | json }}</div>
      
     </pre>
     <h3 style="margin: 0 0 0.75rem 0; font-size: 1.125rem; font-weight: 600;">
@@ -45,18 +92,18 @@ nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel
 
     <div style="display: grid; gap: 0.5rem;">
       <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
-        <span style="font-weight: 500;">Calories</span>
+        <span style="font-weight: 500;">{{ 'nutrition.panel.calories' | t }}</span>
         <span>{{ nutrition.calories.value }}</span>
       </div>
 
       <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
-        <span style="font-weight: 500;">Protein</span>
-        <span>{{ nutrition.protein.value }}g</span>
+        <span style="font-weight: 500;">{{ 'nutrition.panel.protein' | t }}</span>
+        <span>{{ nutrition.protein.value }}{{ 'nutrition.panel.gramsUnit' | t }}</span>
       </div>
 
       <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-        <span style="font-weight: 500;">Carbs</span>
-        <span>{{ nutrition.carbs.value }}g</span>
+        <span style="font-weight: 500;">{{ 'nutrition.panel.carbs' | t }}</span>
+        <span>{{ nutrition.carbs.value }}{{ 'nutrition.panel.gramsUnit' | t }}</span>
       </div>
     </div>
   </div>

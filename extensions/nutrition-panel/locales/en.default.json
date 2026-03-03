@@ -1,0 +1,19 @@
+{
+  "name": "Edit Nutrition Information",
+  "loading": "Loading nutrition data...",
+  "save-button": "Save",
+  "cancel-button": "Cancel",
+  "name-label": "Panel Name",
+  "name-help": "Name for this nutrition panel",
+  "name-error": "Please enter a name",
+  "calories-label": "Calories",
+  "calories-help": "Total calories",
+  "calories-error": "Please enter valid calories",
+  "protein-label": "Protein (g)",
+  "carbs-label": "Carbs (g)",
+  "grams-unit": "in grams",
+  "field-error": "Please enter a valid value",
+  "market-label": "Market",
+  "language-label": "Language",
+  "all-markets": "All markets (default)"
+}

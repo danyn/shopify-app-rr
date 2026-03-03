@@ -1,0 +1,28 @@
+base-prompt:
+make this plan by referencing the shopify-dev-mcp. confirm that you are able to read shopify-dev-mcp.  Use a high degree of confindence when generating plans and code. 
+task:
+We need to make an interface for selecting translation regions.  This UI element is across the top of the modal generated in extensions/nutrition-panel/src/ActionExtension.jsx.  The only UI elements that we can use are the Polaris web components that are supported in UI extensions. We could use Menu with items that are one for each region. 
+
+------------
+
+base-prompt:
+make this plan by referencing the shopify-dev-mcp. confirm that you are able to read shopify-dev-mcp.  Use a high degree of confindence when generating plans and code. 
+task:
+Create a new metobject definition for metaobjects.app.nutrition_panel in shopify.app.development.toml 
+
+all nutrition data needs to be in a json field.  This includes metaobjects.app.nutrition_panel.fields.calories, metaobjects.app.nutrition_panel.fields.protein, metaobjects.app.nutrition_panel.fields.carbs,
+Json Structure:
+
+--------------
+make this plan by referencing the shopify-dev-mcp. confirm that you are able to read shopify-dev-mcp.  Use a high degree of confindence when generating plans and code. 
+explore the translations graphql api
+explain how 'locale' works.  Explain how 'market' works.  How do they work together.
+we need to create a dropdown that allows the user to choose avaible locales, and markets
+We need to make an interface for selecting translation regions.  This UI element is across the top of the modal generated in extensions/nutrition-panel/src/ActionExtension.jsx.  The only UI elements that we can use are the Polaris web components that are supported in UI extensions. We could use Menu with items. This is the first step.  It only determines the available locales and markets and allows selection.  The next step is to implelement translations for nutrition labels.  This could be just the language, or a completely label if it changes due to a new market 
+
+
+
+--------
+
+if the market has a location in the market then it might be a different label with a different image, or it could just be a language translation.
+

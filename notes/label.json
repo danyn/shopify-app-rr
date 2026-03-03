@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "NutritionFactsLabel v1",
+  "description": "JSON Schema for consistent Nutrition Facts extraction.",
+  "type": "object",
+  "required": [
+    "is_readable",
+    "language",
+    "ocr_text",
+    "serving_size",
+    "calories",
+    "total_fat",
+    "saturated_fat",
+    "trans_fat",
+    "cholesterol",
+    "sodium",
+    "total_carbohydrate",
+    "dietary_fiber",
+    "total_sugars",
+    "added_sugars",
+    "protein",
+    "vitamin_d",
+    "calcium",
+    "iron",
+    "potassium",
+    "other_nutrients",
+    "ingredients",
+    "contains"
+  ],
+  "properties": {
+    "is_readable": { "type": "boolean", "default": true },
+    "language": { "type": "string", "default": "en-US" },
+    "ocr_text": { "type": "string" },
+    "serving_size": {
+      "type": "object",
+      "required": ["amount", "unit", "raw_text"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "unit": { "type": "string" },
+        "raw_text": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "calories": { "type": "number", "minimum": 0 },
+
+    "total_fat": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "saturated_fat": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "trans_fat": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "cholesterol": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "sodium": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "total_carbohydrate": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "dietary_fiber": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "total_sugars": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "added_sugars": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "protein": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "vitamin_d": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "calcium": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "iron": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "potassium": { "anyOf": [ { "$ref": "#/definitions/nutrient" }, { "type": "null" } ] },
+    "ingredients":  { "type": ["string", "null"] },
+    "contains": { "type": ["string", "null"] },
+
+    "other_nutrients": {
+      "type": ["object","null"],
+      "description": "Voluntary nutrients keyed by a short name (e.g., 'folate'). Use null when none are present.",
+      "required": [],
+      "properties": {},
+      "additionalProperties": { "$ref": "#/definitions/nutrient" }
+    }
+  },
+  "definitions": {
+    "nutrient": {
+      "type": "object",
+      "required": ["name", "amount", "unit", "percent_dv", "raw_text"],
+      "properties": {
+        "name": { "type": "string" },
+        "amount": { "type": "number" },
+        "unit": { "type": "string" },
+        "percent_dv": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "raw_text": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

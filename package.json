@@ -16,6 +16,7 @@
     "dash": true
   },
   "dependencies": {
+    "@preact/signals": "^2.8.1",
     "@react-router/cloudflare": "^7.0.0",
     "@react-router/fs-routes": "^7.0.0",
     "@react-router/node": "^7.0.0",
@@ -23,8 +24,10 @@
     "@shopify/app-bridge-react": "4.2.2",
     "@shopify/shopify-app-react-router": "^1.0.0",
     "@shopify/shopify-app-session-storage-kv": "^5.0.4",
+    "@shopify/ui-extensions": "2025.10.13",
     "drizzle-orm": "^0.44.5",
     "isbot": "^5.1.30",
+    "preact": "^10.28.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router": "^7.0.0",
@@ -57,6 +60,10 @@
     "node": ">=20.10"
   },
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "extensions/*"
+  ],
   "scripts": {
     "build": "react-router build",
     "deploy": "wrangler deploy",
@@ -67,6 +74,8 @@
     "wrangler:typegen": "wrangler types",
     "cf:tunnel": "cloudflared tunnel run --token $CF_TUNNEL_TOKEN",
     "cf:dev": "shopify app dev --tunnel-url https://dev-tunnel.minder.solutions:5500",
+    "cf:tunnel:quiet": "cloudflared tunnel run --token $CF_TUNNEL_TOKEN 2>&1 | grep -iE 'error|connected|registered'",
+    "cf:start": "npm run cf:tunnel:quiet & npm run cf:dev",
     "packages:show": "npm list --depth=0",
     "drizzle:generate:subscriptions": "drizzle-kit generate --config=drizzle-db/drizzle.subscriptions.config.ts --name=intialMigrationFromSchemaFiles",
     "drizzle:studio": "drizzle-kit studio --config=drizzle-db/drizzle.studio.config.ts",

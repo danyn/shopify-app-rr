@@ -1,0 +1,55 @@
+file: extensions/nutrition-panel/src/defaultState.js
+- imageThumbnail may be redundant, can we just use imageUrl
+- DONE
+
+file: extensions/nutrition-panel/src/graphql.js
+- is there a way to share this utility file maybe by using a npm hosted locally? or installed?
+- DONE
+
+file: /Users/danynfidel/GitHub/shopify-app-templates/shopify-app-rr/extensions/nutrition-panel/src/useNutritionData.js
+- get the product id using the shopify object 
+- const { data: shopifyUiExtension, i18n } = shopify;
+- productId = shopifyUiExtension.selected[0].id
+- console log data and see what it is.
+DONE
+
+
+file: /Users/danynfidel/GitHub/shopify-app-templates/shopify-app-rr/extensions/nutrition-panel/src/useOnSubmit.js
+- this function returns an async function
+- explain how this plays out in the preact template where it is called
+- should it still use useCallback to return a memoized function?
+- if so make a plan to implement useCallback
+- create a helper function to return the same 'const fields' this might be the same for both create and update
+DONE
+
+file: extensions/nutrition-panel/src/ActionExtension.jsx
+- it only needs const {  i18n } = shopify for the s-admin-action heading
+- FormActions in extensions/nutrition-panel/src/components.jsx use both the shopify and the passed in i18n
+- since 'shopify' is a globalThis just use it where and when you need don't pass props down unless it really makes sense to.
+DONE
+file: extensions/nutrition-panel/src/components.jsx
+- use the shopify object locally dont pass into props locally can pass to subcomponents especially if in a for loop
+- check the types of the numerical inputs and implement a dependency free way to make this clean
+
+Rename files: DONE
+localState.js -> state.js
+localStateModules.js -> stateModules.js
+defaultState -> stateDefault.js
+
+
+#####
+Overarching - do some type checking and casting
+- for the label type and accuracy level of the number input
+- is there float or just int?
+- should there be an || 0 operator or is there a better way?
+  - avoid setting to 0 on error.
+  - is the || there an error or a default value?
+
+---
+clean out console logs and figure out what your doing with logging
+
+## inform the AI agent
+- figure out how to inform the agent better
+- ex. event.currentTarget for the s-input
+- create a running list of errors the ai makes and use it along with the mcp
+

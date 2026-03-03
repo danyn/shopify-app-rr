@@ -1,0 +1,38 @@
+{
+  region: string,
+  title: string,
+  serving_information: {
+    servings: {
+      servings_per: {
+        value: number,
+        per: string,
+        display_text: string,
+      }
+      serving_size: {
+        name: string,
+        value: number,
+        unit: string,
+        parenthetical: {
+          value: number,
+          unit: string,
+        }
+      }
+    }
+    calories: {
+      value: number,
+      unit: string,
+      sub_title: string,
+      title: string
+    }
+  }
+  protein: nutrient,
+}
+
+{
+nutrient: {
+  name: string,
+  amount: number,
+  unit: string,
+  percent_dv: number || null,
+  }
+}

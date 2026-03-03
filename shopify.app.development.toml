@@ -6,15 +6,22 @@ handle = "cf-sf-app-0-dev"
 application_url = "https://dev-tunnel.minder.solutions"
 embedded = true
 
+######################################
+# Metaobject Definitions 
+# https://shopify.dev/docs/apps/build/metafields/list-of-data-types#declarative-toml-type-syntax
+#######################################
 
-##################
-# Metaobject Definitions
+##################################
+# Nutrition Panel Old version
+##################################
+
 [metaobjects.app.nutrition_panel]
 name = "Nutrition Panel"
 description = "Nutrition information for products"
 access.admin = "merchant_read_write"
 access.storefront = "public_read"
 capabilities.publishable = true
+capabilities.translatable = true
 
 [metaobjects.app.nutrition_panel.fields.name]
 name = "Name"
@@ -32,10 +39,17 @@ type = "number_decimal"
 name = "Carbs (g)"
 type = "number_decimal"
 
+[metaobjects.app.nutrition_panel.fields.image]
+name = "Nutrition Panel Image"
+type = "file_reference"
+
 [metaobjects.app.nutrition_panel.fields.product_reference]
 name = "Product"
 type = "product_reference"
 
+####################
+# Recipe
+####################
 [metaobjects.app.recipe]
 name = "Recipe"
 description = "Recipe content for articles"
@@ -99,7 +113,7 @@ api_version = "2025-04"
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 # https://shopify.dev/docs/api/usage/access-scopes
-scopes = "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations, read_products, write_products, read_content, write_content"
+scopes = "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations, read_products, write_products, read_content, write_content, write_files, read_files"
 [auth]
 redirect_urls = [ ]
 

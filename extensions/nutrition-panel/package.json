@@ -1,0 +1,8 @@
+{
+  "name": "nutrition-panel-extension",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@local/extension-utils": "*"
+  }
+}

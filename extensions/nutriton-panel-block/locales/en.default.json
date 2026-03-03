@@ -1,0 +1,15 @@
+{
+  "name": "Nutrition Panel",
+  "welcome": "View nutrition panel",
+  "productName": "Product Name",
+  "calories": "Calories",
+  "protein": "Protein",
+  "carbohydrates": "Carbohydrates",
+  "caloriesUnit": "kcal",
+  "gramsUnit": "g",
+  "noData": "No nutrition data available for this product.",
+  "loading": "Loading nutrition data...",
+  "error": "Error",
+  "edit": "Edit Nutrition Facts",
+  "add": "Add Nutrition Facts"
+}
