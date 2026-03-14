@@ -2,6 +2,7 @@ import { useLocalState } from "./state";
 import { useFileUpload } from "./useFileUpload";
 import { useOnSubmit } from "./useOnSubmit";
 
+
 export function RegionSelector() {
   const { i18n } = shopify;
   const state = useLocalState('state');
@@ -53,50 +54,6 @@ export function FormActions() {
         {i18n.translate("cancel-button")}
       </s-button>
     </>
-  );
-}
-
-export function ImageUpload() {
-  const state = useLocalState('state');
-  const handleFileUpload = useFileUpload();
-  const { imageUrl, uploadingImage, imageUploadError } = state.ImageUpload;
-
-  return (
-    <s-grid-item gridColumn="span 1">
-      <s-stack direction="block" gap="base small-200">
-        <s-text>Nutrition panel image</s-text>
-
-        {imageUrl && (
-          <s-box padding-block-end="base" padding="small" background="transparent" border="base" borderRadius="base">
-            <s-image
-              src={imageUrl}
-              alt="Nutrition panel preview"
-              border="base"
-            />
-          </s-box>
-        )}
-
-        <s-drop-zone
-          accept="image/*"
-          label={imageUrl ? "Replace image" : "Upload image"}
-          onInput={(e) => handleFileUpload(e.currentTarget.files)}
-          disabled={uploadingImage || state.saving}
-        />
-
-        {uploadingImage && (
-          <s-stack direction="inline">
-            <s-spinner size="base" />
-            <s-text>Uploading and processing image...</s-text>
-          </s-stack>
-        )}
-
-        {imageUploadError && (
-          <s-banner tone="critical">
-            {imageUploadError}
-          </s-banner>
-        )}
-      </s-stack>
-    </s-grid-item>
   );
 }
 
@@ -163,5 +120,72 @@ export function FormInputs() {
         </s-box>
       </s-stack>
     </s-grid-item>
+  );
+}
+
+export function ImageUpload() {
+  const state = useLocalState('state');
+  const handleFileUpload = useFileUpload();
+  const { imageUrl, uploadingImage, imageUploadError, imageWidth, imageHeight } = state.ImageUpload;
+  const hasImageDimensions = Boolean(imageHeight && imageWidth);
+  
+  return (
+    <s-grid-item gridColumn="span 1">
+      <s-stack direction="block" gap="base small-200" inlineSize="100%">
+        <s-text>Nutrition panel image</s-text>
+
+        {/* Image Display Area */}
+        {uploadingImage ? (
+          <LoadingPlaceholder isLoading={uploadingImage} />
+        ) : (
+          // Image preview
+          <s-image
+            src={imageUrl}
+            alt="Nutrition panel preview"
+            inlineSize="fill"
+            {...(hasImageDimensions && { aspectRatio: `${imageWidth}/${imageHeight}` })}
+            objectFit={hasImageDimensions ? 'cover' : 'contain'}
+            borderRadius="small"
+            border="large-100 strong dashed"
+          />
+        )}
+
+        {/* Drop Zone - Always shown */}
+        <s-drop-zone
+          accept="image/*"
+          label={imageUrl ? "Replace image" : "Upload image"}
+          onInput={(e) => handleFileUpload(e.currentTarget.files)}
+          disabled={uploadingImage || state.saving}
+        />
+
+        {/* Error Banner */}
+        {imageUploadError && (
+          <s-banner tone="critical">
+            {imageUploadError}
+          </s-banner>
+        )}
+      </s-stack>
+    </s-grid-item>
+  );
+}
+
+function LoadingPlaceholder({ isLoading }) {
+  return (
+    <s-box
+      minBlockSize="200px"
+      borderRadius="small"
+      border="large-100 strong dashed"
+      background="subdued"
+    >
+      <s-stack 
+        direction="block" 
+        gap="base" 
+        alignItems="center" 
+        justifyContent="center"
+        blockSize="200px"
+      >
+        <s-spinner size="large" />
+      </s-stack>
+    </s-box>
   );
 }

@@ -24,6 +24,8 @@ export async function fetchNutritionData(productId) {
                     id
                     image {
                       url
+                      width
+                      height
                     }
                   }
                 }
@@ -53,6 +55,8 @@ export async function fetchNutritionData(productId) {
     if (imageRef) {
       data.image = imageRef.id;
       data.imageUrl = imageRef.image?.url;
+      data.imageWidth = imageRef.image?.width;
+      data.imageHeight = imageRef.image?.height;
     }
 
     return data;

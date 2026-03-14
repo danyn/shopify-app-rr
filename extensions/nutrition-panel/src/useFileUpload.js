@@ -16,13 +16,13 @@ export function useFileUpload() {
     dispatch({ type: 'ImageUpload', payload: { type: 'uploadStart', data: {} } });
 
     try {
-      const { fileId, url: imageUrl } = await uploadImageToShopify(file);
+      const { fileId, url: imageUrl, width: imageWidth , height: imageHeight } = await uploadImageToShopify(file);
 
       dispatch({
         type: 'ImageUpload',
         payload: {
           type: 'uploadSuccess',
-          data: { image: fileId, imageUrl },
+          data: { image: fileId, imageUrl, imageWidth, imageHeight },
         },
       });
 
@@ -46,7 +46,7 @@ export function useFileUpload() {
  * Handles the complete 3-step workflow: staged upload → upload to S3 → create file → poll for ready
  * 
  * @param {File} file - The browser File object to upload
- * @returns {Promise<{fileId: string, status: string, url: string}>} - Returns the Shopify file GID and final status
+ * @returns {Promise<{fileId: string, status: string, url: string, width: number, height: number}>} - Returns the Shopify file GID and final status
  * @throws {Error} - Throws if any step fails
  */
 async function uploadImageToShopify(file) {
@@ -60,9 +60,9 @@ async function uploadImageToShopify(file) {
   const fileId = await createShopifyFile(stagedTarget.resourceUrl, file.name);
 
   // Step 4: Poll until file is ready
-  const { status, url }= await pollUntilReady(fileId);
+  const { status, url, width, height } = await pollUntilReady(fileId);
 
-  return { fileId, status, url };
+  return { fileId, status, url, width, height };
 }
 
 /**
@@ -210,7 +210,7 @@ async function createShopifyFile(resourceUrl, altText) {
  * @param {string} fileId - The Shopify file GID to check
  * @param {number} maxAttempts - Maximum polling attempts (default: 30)
  * @param {number} intervalMs - Interval between polls in milliseconds (default: 2000)
- * @returns {Promise<{status: string, url: string}>} - {status: "READY" or "FAILED" , url: "http://cdn.shopify.image"}
+ * @returns {Promise<{status: string, url: string, width: number, height: number}>}
  */
 async function pollUntilReady(fileId, maxAttempts = 30, intervalMs = 2000) {
   const query = `
@@ -220,6 +220,8 @@ async function pollUntilReady(fileId, maxAttempts = 30, intervalMs = 2000) {
           fileStatus
           image {
             url
+            width
+            height
           }
         }
       }
@@ -234,10 +236,12 @@ async function pollUntilReady(fileId, maxAttempts = 30, intervalMs = 2000) {
     }
 
     const status = response.data.node.fileStatus;
-    const url = response.data.node.image?.url || null
+    const url = response.data.node.image?.url || null;
+    const width = response.data.node.image?.width || null;
+    const height = response.data.node.image?.height || null;
 
     if (status === 'READY') {
-      return {status:'READY', url};
+      return { status: 'READY', url, width, height };
     }
 
     if (status === 'FAILED') {

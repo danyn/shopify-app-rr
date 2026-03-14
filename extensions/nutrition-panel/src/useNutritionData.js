@@ -26,6 +26,8 @@ export function useNutritionData() {
               carbs: existingData.carbs ? parseFloat(existingData.carbs) : 0,
               image: existingData.image || "",
               imageUrl: existingData.imageUrl || "",
+              imageWidth: existingData.imageWidth || null,
+              imageHeight: existingData.imageHeight || null,
             },
           });
         } else {

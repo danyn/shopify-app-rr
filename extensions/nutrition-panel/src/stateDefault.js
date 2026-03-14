@@ -13,6 +13,8 @@ export const defaultState = {
     imageUploadError: "",
     image: "",
     imageUrl: "",
+    imageWidth: null,
+    imageHeight: null,
   },
   FormInputs: {
     name: "",

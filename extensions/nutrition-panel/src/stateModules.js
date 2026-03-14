@@ -58,6 +58,8 @@ export function ImageUpload(state, payload) {
           uploadingImage: false,
           image: data.image,
           imageUrl: data.imageUrl,
+          imageWidth: data.imageWidth || null,
+          imageHeight: data.imageHeight || null,
         },
       };
     }

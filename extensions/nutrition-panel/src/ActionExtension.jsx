@@ -31,7 +31,7 @@ function ExtensionInner() {
 
       {/* Form */}
       <s-grid
-        gridTemplateColumns="repeat(2, 1fr)"
+        gridTemplateColumns="5fr 5fr"
         gap="small"
         justifyContent="center"
       >

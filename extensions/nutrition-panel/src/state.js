@@ -26,6 +26,8 @@ function reducer(state, action) {
           ...state.ImageUpload,
           image: payload.image || "",
           imageUrl: payload.imageUrl || "",
+          imageWidth: payload.imageWidth || null,
+          imageHeight: payload.imageHeight || null,
         },
       };
     }
