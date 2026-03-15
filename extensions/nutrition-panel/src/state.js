@@ -1,7 +1,7 @@
 import { createContext } from 'preact';
 import { useReducer, useContext } from 'preact/hooks';
 import { defaultState } from './stateDefault';
-import { RegionSelector, ImageUpload, FormInputs } from './stateModules';
+import { RegionSelector, ImageUpload, FormInputs, TranslationModule } from './stateModules';
 
 const LocalStateContext = createContext(null);
 const LocalDispatchContext = createContext(null);
@@ -21,6 +21,7 @@ function reducer(state, action) {
           calories: payload.calories || 0,
           protein: payload.protein || 0,
           carbs: payload.carbs || 0,
+          nutrition_details: payload.nutrition_details || "",
         },
         ImageUpload: {
           ...state.ImageUpload,
@@ -43,6 +44,7 @@ function reducer(state, action) {
     case 'RegionSelector': return RegionSelector(state, payload);
     case 'ImageUpload': return ImageUpload(state, payload);
     case 'FormInputs': return FormInputs(state, payload);
+    case 'TranslationModule': return TranslationModule(state, payload);
 
     default: {
       console.info('LocalState: NO ACTION DEFINED', { type, payload });

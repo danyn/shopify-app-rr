@@ -111,3 +111,58 @@ export function FormInputs(state, payload) {
     }
   }
 }
+
+export function TranslationModule(state, payload) {
+  const { type, data } = payload;
+  switch (type) {
+    case 'loadTranslations': {
+      return {
+        ...state,
+        TranslationModule: {
+          ...state.TranslationModule,
+          translations: data.translations,
+          currentLocaleTranslations: data.translations[data.locale] || {},
+        },
+      };
+    }
+    case 'setTranslation': {
+      const newTranslations = {
+        ...state.TranslationModule.currentLocaleTranslations,
+        [data.field]: data.value,
+      };
+      return {
+        ...state,
+        TranslationModule: {
+          ...state.TranslationModule,
+          currentLocaleTranslations: newTranslations,
+          translations: {
+            ...state.TranslationModule.translations,
+            [data.locale]: newTranslations,
+          },
+        },
+      };
+    }
+    case 'setSavingTranslations': {
+      return {
+        ...state,
+        TranslationModule: {
+          ...state.TranslationModule,
+          savingTranslations: data,
+        },
+      };
+    }
+    case 'setTranslationError': {
+      return {
+        ...state,
+        TranslationModule: {
+          ...state.TranslationModule,
+          translationError: data,
+        },
+      };
+    }
+    default: {
+      console.warn('TranslationModule reducer: unknown type', type);
+      return state;
+    }
+  }
+}

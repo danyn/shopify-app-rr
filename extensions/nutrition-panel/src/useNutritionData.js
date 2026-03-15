@@ -24,6 +24,7 @@ export function useNutritionData() {
               calories: existingData.calories ? parseFloat(existingData.calories) : 0,
               protein: existingData.protein ? parseFloat(existingData.protein) : 0,
               carbs: existingData.carbs ? parseFloat(existingData.carbs) : 0,
+              nutrition_details: existingData.nutrition_details || "",
               image: existingData.image || "",
               imageUrl: existingData.imageUrl || "",
               imageWidth: existingData.imageWidth || null,

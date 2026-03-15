@@ -14,6 +14,7 @@ function buildNutritionFields(nutritionData, productId = null) {
     { key: "protein", value: String(nutritionData.protein) },
     { key: "carbs", value: String(nutritionData.carbs) },
     ...(nutritionData.image ? [{ key: "image", value: nutritionData.image }] : []),
+    ...(nutritionData.nutrition_details ? [{ key: "nutrition_details", value: nutritionData.nutrition_details }] : []),
   ];
 
   if (productId) {
@@ -159,6 +160,79 @@ function validateForm(nutritionData) {
 }
 
 /**
+ * Save translations for a metaobject
+ * @param {string} resourceId - The metaobject GID
+ * @param {string} locale - The locale to save translations for
+ * @param {Object} translations - Object with field keys and translated values
+ */
+async function saveTranslations(resourceId, locale, translations) {
+  // First, get digest values from translatableResources
+  const digestQuery = `#graphql
+    query getDigests($resourceId: ID!) {
+      translatableResource(resourceId: $resourceId) {
+        translatableContent {
+          key
+          digest
+          locale
+        }
+      }
+    }
+  `;
+
+  const digestResponse = await makeGraphQLQuery(digestQuery, {
+    resourceId,
+  });
+
+  const digestMap = {};
+  digestResponse?.data?.translatableResource?.translatableContent?.forEach(content => {
+    digestMap[content.key] = content.digest;
+  });
+
+  // Build translation inputs
+  const translationInputs = Object.entries(translations)
+    .filter(([key, value]) => value && value.trim())
+    .map(([key, value]) => ({
+      key,
+      value,
+      locale,
+      translatableContentDigest: digestMap[key],
+    }));
+
+  if (translationInputs.length === 0) {
+    return;
+  }
+
+  // Register translations
+  const mutation = `#graphql
+    mutation translationsRegister($resourceId: ID!, $translations: [TranslationInput!]!) {
+      translationsRegister(resourceId: $resourceId, translations: $translations) {
+        userErrors {
+          message
+          field
+        }
+        translations {
+          key
+          value
+          locale
+        }
+      }
+    }
+  `;
+
+  const response = await makeGraphQLQuery(mutation, {
+    resourceId,
+    translations: translationInputs,
+  });
+
+  if (response?.data?.translationsRegister?.userErrors?.length > 0) {
+    const errorMsg = response.data.translationsRegister.userErrors[0].message;
+    throw new Error(`Translation error: ${errorMsg}`);
+  }
+
+  console.log('Translations saved:', response?.data?.translationsRegister?.translations);
+}
+
+/**
  * Returns an onSubmit function that reads state from LocalState, validates and saves.
  * @param {string} productId
  * @param {Function} close
@@ -175,6 +249,7 @@ export function useOnSubmit(productId, close) {
       calories: state.FormInputs.calories,
       protein: state.FormInputs.protein,
       carbs: state.FormInputs.carbs,
+      nutrition_details: state.FormInputs.nutrition_details,
       image: state.ImageUpload.image,
       imageUrl: state.ImageUpload.imageUrl,
     };
@@ -189,12 +264,27 @@ export function useOnSubmit(productId, close) {
       try {
         dispatch({ type: 'setSaving', payload: { saving: true } });
         console.log("Saving nutrition data:", nutritionData);
-        if (nutritionData.id) {
+        
+        let metaobjectId = nutritionData.id;
+        
+        if (metaobjectId) {
           console.log(`update ${nutritionData.name}`);
-          await updateNutritionData(nutritionData.id, nutritionData);
+          await updateNutritionData(metaobjectId, nutritionData);
         } else {
-          await createNutritionData(productId, nutritionData);
+          const result = await createNutritionData(productId, nutritionData);
+          metaobjectId = result?.data?.metaobjectCreate?.metaobject?.id;
         }
+
+        // Save translations if any exist for current locale
+        const { selectedLocale, locales } = state.RegionSelector;
+        const defaultLocale = locales?.find(l => l.primary)?.locale || 'en';
+        const { currentLocaleTranslations } = state.TranslationModule;
+        
+        if (metaobjectId && selectedLocale && selectedLocale !== defaultLocale && Object.keys(currentLocaleTranslations).length > 0) {
+          console.log('Saving translations for locale:', selectedLocale);
+          await saveTranslations(metaobjectId, selectedLocale, currentLocaleTranslations);
+        }
+
         close();
       } catch (error) {
         console.error("Error saving nutrition data:", error);

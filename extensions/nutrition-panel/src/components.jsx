@@ -61,7 +61,7 @@ export function FormInputs() {
   const { i18n } = shopify;
   const state = useLocalState('state');
   const dispatch = useLocalState('dispatch');
-  const { name, calories, protein, carbs, formErrors } = state.FormInputs;
+  const { name, calories, protein, carbs, nutrition_details, formErrors } = state.FormInputs;
 
   const setField = (field, value) =>
     dispatch({ type: 'FormInputs', payload: { type: 'setField', data: { field, value } } });
@@ -116,6 +116,17 @@ export function FormInputs() {
             help-text={i18n.translate("grams-unit")}
             min={0}
             step={0.1}
+          />
+        </s-box>
+
+        {/* Nutrition Details JSON */}
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={nutrition_details}
+            onChange={(e) => setField('nutrition_details', e.currentTarget.value)}
+            label="Nutrition Details (JSON)"
+            help-text='Example: {"nutrients": [{"name": "Sodium", "unit": "mg", "value": 50}]}'
+            rows={6}
           />
         </s-box>
       </s-stack>

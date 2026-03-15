@@ -21,6 +21,13 @@ export const defaultState = {
     calories: 0,
     protein: 0,
     carbs: 0,
+    nutrition_details: "",
     formErrors: null,
+  },
+  TranslationModule: {
+    translations: {},
+    currentLocaleTranslations: {},
+    savingTranslations: false,
+    translationError: null,
   },
 };

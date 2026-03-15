@@ -34,7 +34,8 @@ Before doing anything else, call `shopify-dev-mcp/search_docs_chunks` with a sim
 Return a markdown plan with:
 - **TL;DR**: one-sentence summary
 - **Prerequisites**: scopes, CLI commands, or setup steps
-- **Implementation Steps**: numbered, grouped into phases when >5 steps
+- **Implementation Steps**: numbered, grouped into phases. If  instructions are given by the user propmot with the label 'STEP-N\n' such as 'STEP-1\n' then print your instructions for claude-implement-shopify in the same way. claude-implement-shopify uses this to stop for alertations and to allow the user to commit to version control.
+
 - **Key API/Schema References**: every relevant type, mutation, or extension target used
 - **Verification**: how to test each phase
 - **Confidence**: overall confidence (High / Medium / Low) with reasoning

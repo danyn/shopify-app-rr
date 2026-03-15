@@ -1,8 +1,10 @@
 import { render } from "preact";
 import { useLocalesAndMarkets } from "./useLocalesAndMarkets";
 import { useNutritionData } from "./useNutritionData";
+import { useTranslations } from "./useTranslations";
 import { LocalState, useLocalState } from "./state";
 import { RegionSelector, FormActions, ImageUpload, FormInputs } from "./components.jsx";
+import { TranslationForm } from "./TranslationForm.jsx";
 
 export default async () => {
   render(<Extension />, document.body);
@@ -22,6 +24,7 @@ function ExtensionInner() {
 
   useLocalesAndMarkets();
   useNutritionData();
+  useTranslations();
 
   return (
     <s-admin-action heading={i18n.translate("name")} loading={state.saving || state.loading}>
@@ -38,6 +41,9 @@ function ExtensionInner() {
         <ImageUpload />
         <FormInputs />
       </s-grid>
+
+      {/* Translation Form */}
+      <TranslationForm />
 
     </s-admin-action>
   );

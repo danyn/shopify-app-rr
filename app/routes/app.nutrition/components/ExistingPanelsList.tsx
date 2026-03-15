@@ -1,5 +1,6 @@
 import { getFieldValue } from "../utils/metaobjectHelpers";
 import { AttachToProductButton } from "./AttachToProductButton";
+import { ProductIntent } from "./ProductIntent";
 import { ThemeEditorPreview } from "./ThemeEditorPreview";
 
 /**
@@ -16,8 +17,10 @@ export function ExistingPanelsList({ instances, currentTheme }: { instances: any
       ) : (
         <div style={{ display: "grid", gap: "15px" }}>
           {instances.map((instance: any) => {
-            const productRef = instance.fields.find((f: any) => f.key === "product_reference");
-            const hasProductRef = !!productRef?.value;
+            const productRefField = instance.fields.find((f: any) => f.key === "product_reference");
+            const productId = productRefField?.value;
+            const product = productRefField?.reference;
+            const isAttached = !!productId;
             
             return (
               <div
@@ -31,27 +34,30 @@ export function ExistingPanelsList({ instances, currentTheme }: { instances: any
                   <div>Carbs: {getFieldValue(instance.fields, "carbs")}g</div>
                 </div>
 
-                {hasProductRef ? (
+                {isAttached ? (
                   <div style={{ marginTop: "10px", padding: "8px", backgroundColor: "#f0fdf4", borderRadius: "4px", border: "1px solid #86efac" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div>
                         <span style={{ color: "#16a34a", fontWeight: "500" }}>✓ Attached to Product</span>
                         <div style={{ marginTop: "5px", fontSize: "12px", color: "#166534" }}>
-                          {productRef.reference ? (
+                          {product ? (
                             <>
-                              <div><strong>{productRef.reference.title}</strong></div>
-                              <div>Handle: {productRef.reference.handle}</div>
+                              <div><strong>{product.title}</strong></div>
+                              <div>Handle: {product.handle}</div>
                             </>
                           ) : (
-                            <div>Product ID: {productRef.value}</div>
+                            <div>Product ID: {productId}</div>
                           )}
                         </div>
                       </div>
-                      <ThemeEditorPreview 
-                        instance={instance} 
-                        disabled={false} 
-                        currentTheme={currentTheme} 
-                      />
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <ProductIntent gid={productId} />
+                        <ThemeEditorPreview 
+                          instance={instance} 
+                          disabled={false} 
+                          currentTheme={currentTheme} 
+                        />
+                      </div>
                     </div>
                   </div>
                 ) : (

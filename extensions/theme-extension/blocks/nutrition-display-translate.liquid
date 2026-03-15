@@ -1,0 +1,183 @@
+<style>
+  .nutrition-panel-translated {
+    border: 2px solid #00a0dc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    background: #f8fcff;
+  }
+  .locale-indicator {
+    background: #00a0dc;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .nutrition-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .nutrition-row:last-child {
+    border-bottom: none;
+  }
+  .nutrition-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #00a0dc;
+  }
+  .debug-section {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #666;
+  }
+  .nutrients-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+  }
+  .nutrients-table th {
+    background: #00a0dc;
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .nutrients-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .nutrients-table tr:last-child td {
+    border-bottom: none;
+  }
+  .nutrients-table tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+</style>
+
+{% comment %} 
+  This block uses Translation API translations, not static locale files.
+  Metaobject fields with translatable capability automatically return 
+  translated values based on localization.language.iso_code 
+{% endcomment %}
+
+{% comment %} Current locale indicator {% endcomment %}
+<div class="locale-indicator">
+  🌍 {{ localization.language.endonym_name }} ({{ localization.language.iso_code }})
+</div>
+
+{% comment %} Get nutrition panel metaobject {% endcomment %}
+{% assign nutrition = product.metafields["$app"].nutrition_panel.value %}
+
+{% if nutrition %}
+  <div class="nutrition-panel-translated">
+    {% comment %} Translatable name field - auto-translated by Shopify {% endcomment %}
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 1.125rem; font-weight: 600;">
+      {{ nutrition.name.value }}
+    </h3>
+
+    {% comment %} Non-translatable number fields - same values across all locales {% endcomment %}
+    <div style="display: grid; gap: 0.5rem;">
+      <div class="nutrition-row">
+        <span style="font-weight: 500;">Calories</span>
+        <span>{{ nutrition.calories.value }}</span>
+      </div>
+
+      <div class="nutrition-row">
+        <span style="font-weight: 500;">Protein</span>
+        <span>{{ nutrition.protein.value }} g</span>
+      </div>
+
+      <div class="nutrition-row">
+        <span style="font-weight: 500;">Carbs</span>
+        <span>{{ nutrition.carbs.value }} g</span>
+      </div>
+    </div>
+
+    {% comment %} JSON field with translated nutrient names - iterable in Liquid {% endcomment %}
+    {% if nutrition.nutrition_details %}
+      {% comment %} 
+        JSON metafields are automatically deserialized in Liquid.
+        We can iterate through arrays and access properties directly.
+        This data is automatically translated based on Translation API.
+      {% endcomment %}
+      
+      <div class="nutrition-section">
+        <h4 style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #00a0dc; font-weight: 600;">
+          Detailed Nutrients ({{ localization.language.iso_code }})
+        </h4>
+        
+        {% comment %} Access the nutrients array from the JSON structure {% endcomment %}
+        {% assign nutrients_array = nutrition.nutrition_details.value.nutrients %}
+        
+        {% if nutrients_array and nutrients_array.size > 0 %}
+          <table class="nutrients-table">
+            <thead>
+              <tr>
+                <th>Nutrient</th>
+                <th>Value</th>
+                <th>Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for nutrient in nutrients_array %}
+                <tr>
+                  <td style="font-weight: 500;">{{ nutrient.name }}</td>
+                  <td>{{ nutrient.value }}</td>
+                  <td>{{ nutrient.unit }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #008a00; font-weight: 500;">
+            ✓ JSON iterated in Liquid ({{ nutrients_array.size }} nutrients)
+          </p>
+        {% else %}
+          <p style="color: #999; font-size: 0.875rem;">No nutrients data available.</p>
+        {% endif %} 
+      </div>
+    {% endif %}
+
+    {% comment %} Debug info - optional {% endcomment %}
+    {% if block.settings.show_debug %}
+      <details class="debug-section">
+        <summary style="cursor: pointer; font-weight: 500;">🔍 Debug Information</summary>
+        <div style="background: #f5f5f5; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px;">
+          <pre style="margin: 0; overflow-x: auto; font-size: 0.7rem;">
+Current Locale: {{ localization.language.iso_code }}
+Name Value: {{ nutrition.name.value }}
+Nutrition Details: {{ nutrition.nutrition_details.value }}
+          </pre>
+        </div>
+      </details>
+    {% endif %}
+  </div>
+
+{% else %}
+  <div style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px; background: #f9f9f9; color: #999;">
+    <p style="margin: 0;">No nutrition panel data available for this product.</p>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Nutrition Translation",
+  "target": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_debug",
+      "label": "Show debug information",
+      "default": false,
+      "info": "Display technical details about the current locale and field values"
+    }
+  ]
+}
+{% endschema %}

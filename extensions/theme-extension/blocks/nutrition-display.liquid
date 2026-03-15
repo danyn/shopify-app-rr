@@ -63,12 +63,6 @@ https://shopify.dev/docs/api/liquid/objects/metafield
 block.settings.product.metafields["$app:custom"].my_key.value
 
 
-nutrition = product.metafields.app--276599242753--nutrition_panel 
-nutrition = product.metafields.app.nutrition_panel.value 
-nutrition = block.settings.nutition_panel
-nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel
- nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel.value
- from examaple (didn't work) block.settings.product.metafields["$app:custom"].my_key.value
 {% endcomment %}
 {% comment %} Get the nutrition panel metaobject reference {% endcomment %}
 {% assign nutrition = product.metafields["$app"].nutrition_panel.value %}
@@ -110,14 +104,6 @@ nutrition = product.metafields.custom.created_in_admin_reference_nutrition_panel
 {% endif %}
 
 
-{% comment %}
-  {
-    "type": "metaobject",
-    "id": "nutrition_panel",
-    "label": "Nutrition Panel"
-  }
-{% endcomment %}
-
 {% schema %}
 {
   "name": "Nutrition Panel",
@@ -146,4 +132,12 @@ https://shopify.dev/docs/storefronts/themes/architecture/settings/input-settings
 https://admin.shopify.com/store/minder-test/content/metaobjects/entries/app--276599242753--nutrition_panel?selectedColumns=DISPLAY_NAME%2CFIELDS.NAME%2CFIELDS.CALORIES%2CFIELDS.PROTEIN%2CFIELDS.CARBS%2CFIELDS.PRODUCT_REFERENCE%2CADDED_BY%2CUPDATED_AT%2CREFERENCES&order=updated_at&orderDirection=DESCENDING
 https://admin.shopify.com/store/minder-test/settings/custom_data/metaobjects/app--276599242753--nutrition_panel
 https://shopify.dev/docs/apps/build/metaobjects/manage-metaobjects#step-1-create-definitions
+{% endcomment %}
+
+{% comment %}
+  {
+    "type": "metaobject",
+    "id": "nutrition_panel",
+    "label": "Nutrition Panel"
+  }
 {% endcomment %}

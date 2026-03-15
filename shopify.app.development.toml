@@ -12,8 +12,11 @@ embedded = true
 #######################################
 
 ##################################
-# Nutrition Panel Old version
+# Nutrition Panel
 ##################################
+# Translatable field types: single_line_text_field, json
+# Non-translatable types: number_integer, number_decimal, boolean, file_reference, product_reference,
+#                         color, date, date_time, dimension, volume, weight, all reference types
 
 [metaobjects.app.nutrition_panel]
 name = "Nutrition Panel"
@@ -23,29 +26,37 @@ access.storefront = "public_read"
 capabilities.publishable = true
 capabilities.translatable = true
 
+# TRANSLATABLE FIELDS
 [metaobjects.app.nutrition_panel.fields.name]
 name = "Name"
-type = "single_line_text_field"
+type = "single_line_text_field"  # ✅ Translatable
 
+# NON-TRANSLATABLE FIELDS
 [metaobjects.app.nutrition_panel.fields.calories]
 name = "Calories"
-type = "number_integer"
+type = "number_integer"  # ❌ NOT translatable
 
 [metaobjects.app.nutrition_panel.fields.protein]
 name = "Protein (g)"
-type = "number_decimal"
+type = "number_decimal"  # ❌ NOT translatable
 
 [metaobjects.app.nutrition_panel.fields.carbs]
 name = "Carbs (g)"
-type = "number_decimal"
+type = "number_decimal"  # ❌ NOT translatable
 
 [metaobjects.app.nutrition_panel.fields.image]
 name = "Nutrition Panel Image"
-type = "file_reference"
+type = "file_reference"  # ❌ NOT translatable
 
 [metaobjects.app.nutrition_panel.fields.product_reference]
 name = "Product"
-type = "product_reference"
+type = "product_reference"  # ❌ NOT translatable
+
+# NEW TRANSLATABLE JSON FIELD
+[metaobjects.app.nutrition_panel.fields.nutrition_details]
+name = "Nutrition Details (JSON)"
+type = "json"  # ✅ Translatable
+description = "Structured nutrition data with translatable labels. Example: {\"nutrients\": [{\"name\": \"Sodium\", \"unit\": \"mg\", \"value\": 50}]}"
 
 ####################
 # Recipe

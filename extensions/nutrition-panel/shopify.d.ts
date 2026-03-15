@@ -19,6 +19,12 @@ declare module './src/useNutritionData.js' {
 }
 
 //@ts-ignore
+declare module './src/useTranslations.js' {
+  const shopify: import('@shopify/ui-extensions/admin.product-details.action.render').Api;
+  const globalThis: { shopify: typeof shopify };
+}
+
+//@ts-ignore
 declare module './src/state.js' {
   const shopify: import('@shopify/ui-extensions/admin.product-details.action.render').Api;
   const globalThis: { shopify: typeof shopify };
@@ -26,6 +32,12 @@ declare module './src/state.js' {
 
 //@ts-ignore
 declare module './src/components.jsx' {
+  const shopify: import('@shopify/ui-extensions/admin.product-details.action.render').Api;
+  const globalThis: { shopify: typeof shopify };
+}
+
+//@ts-ignore
+declare module './src/TranslationForm.jsx' {
   const shopify: import('@shopify/ui-extensions/admin.product-details.action.render').Api;
   const globalThis: { shopify: typeof shopify };
 }
