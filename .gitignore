@@ -9,3 +9,5 @@ build
 
 # Ignore extension build artifacts
 /extensions/*/dist/
+
+temp/
