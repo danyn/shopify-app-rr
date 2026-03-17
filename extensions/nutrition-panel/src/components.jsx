@@ -1,6 +1,7 @@
 import { useLocalState } from "./state";
 import { useFileUpload } from "./useFileUpload";
 import { useOnSubmit } from "./useOnSubmit";
+import { useCallApiRouteGet, useCallApiRoutePost } from "./useCallApiRoute";
 
 
 export function RegionSelector() {
@@ -139,17 +140,24 @@ export function ImageUpload() {
   const handleFileUpload = useFileUpload();
   const { imageUrl, uploadingImage, imageUploadError, imageWidth, imageHeight } = state.ImageUpload;
   const hasImageDimensions = Boolean(imageHeight && imageWidth);
-  
+
+  const callApiRouteGet = useCallApiRouteGet();
+  const callApiRoutePost = useCallApiRoutePost();
   return (
     <s-grid-item gridColumn="span 1">
       <s-stack direction="block" gap="base small-200" inlineSize="100%">
         <s-text>Nutrition panel image</s-text>
+        <s-stack direction="inline" columnGap="small-100">
+          <s-button onClick={callApiRouteGet}>Call api route GET</s-button>
+          <s-button onClick={callApiRoutePost}>Call api route POST</s-button>
+        </s-stack>
 
         {/* Image Display Area */}
         {uploadingImage ? (
           <LoadingPlaceholder isLoading={uploadingImage} />
         ) : (
           // Image preview
+
           <s-image
             src={imageUrl}
             alt="Nutrition panel preview"
@@ -188,10 +196,10 @@ function LoadingPlaceholder({ isLoading }) {
       border="large-100 strong dashed"
       background="subdued"
     >
-      <s-stack 
-        direction="block" 
-        gap="base" 
-        alignItems="center" 
+      <s-stack
+        direction="block"
+        gap="base"
+        alignItems="center"
         justifyContent="center"
         blockSize="200px"
       >
