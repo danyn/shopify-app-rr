@@ -1,4 +1,7 @@
 # used to create a redirect to the shopify hosted billing page
-SHOPIFY_APP_HANDLE=my-handle
+# SHOPIFY_APP_HANDLE=my-handle
 # used to create redirects to some admin pages
-SHOPIFY_APP_ID=123456789
+# SHOPIFY_APP_ID=123456789
+# set the api secret
+SHOPIFY_API_SECRET=X
+OPENAI_API_KEY=X

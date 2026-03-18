@@ -1,6 +1,6 @@
 {
   "name": "cf-nutrition-and-recipes",
-  "compatibility_date": "2025-04-01",
+  "compatibility_date": "2026-03-17",
   // https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
   "compatibility_flags": [
     "nodejs_compat"
@@ -32,12 +32,12 @@
   "vars": {
     // .dev.vars contains development versions 
     // Use these only to set up production vars then manage in cloudflare console as secrets
-    // "SHOPIFY_API_KEY": "X",
     // "SHOPIFY_API_SECRET": "X",
-    // "SHOPIFY_APP_URL": "X",
-    // "SHOPIFY_APP_HANDLE": "X",
-    // "SHOPIFY_APP_ID": "X",
-    "EMAIL_ADDRESS_TOKEN":"MS._d7Jq3wX8vL-qYp2LcZBsTt.oA4GiL-xekW9PdQnHXIZnQy582KJdrV1yuEVkzOCwq",
-    "SCOPES": "write_products"
+    "SHOPIFY_API_KEY": "X",
+    "SHOPIFY_APP_URL": "X",
+    "SHOPIFY_APP_HANDLE": "X",
+    "SHOPIFY_APP_ID": "X",
+    "SCOPES": "read_markets,read_markets_home,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_themes,read_translations,write_translations, read_products, write_products, read_content, write_content, write_files, read_files"
+    // "EMAIL_ADDRESS_TOKEN":"MS._d7Jq3wX8vL-qYp2LcZBsTt.oA4GiL-xekW9PdQnHXIZnQy582KJdrV1yuEVkzOCwq",
   }
 }
