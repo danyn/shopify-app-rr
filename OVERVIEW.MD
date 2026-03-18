@@ -60,3 +60,12 @@ The configurations are split across multiple files and some values are repeated,
 4. Make the repo it creates Private
 5. In the Cloudflare dashboard, fill in all the variables
 6. Copy the variables into the `shopify.app.toml` files you want to use
+
+## Deploy Buttons
+
+[about deploy buttons](https://developers.cloudflare.com/workers/platform/deploy-buttons/)
+Deploy buttons use:
+-  wrangler.jsonc to set up environment variabes
+- .dev.vars or .dev.vars.example to set up secrets
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=<https://github.com/danyn/shopify-app-rr>)
